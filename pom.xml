@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Modèle du projet Maven -->
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Définition du parent Spring Boot -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.1</version>
+		<relativePath /> <!-- Recherche du parent dans le repository -->
+	</parent>
+
+	<!-- Informations sur le projet -->
+	<groupId>fr.SafetyNet</groupId>
+	<artifactId>SafetyNetAlerts</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>SafetyNetAlerts</name>
+	<description>SafetyNetAlerts's Project</description>
+
+	<!-- Propriétés globales -->
+	<properties>
+		<java.version>21</java.version> <!-- Version de Java utilisée -->
+	</properties>
+
+	<!-- Dépendances Maven -->
+	<dependencies>
+		<!-- Spring Boot Starter Web : pour les applications web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Spring Boot Devtools : pour le développement avec rechargement -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Spring Boot Starter Test : pour les tests -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mockito</groupId>
+					<artifactId>mockito-core</artifactId> <!-- Exclusion de Mockito par défaut -->
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Mockito Core : pour les tests unitaires -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- Configuration de la build -->
+	<build>
+		<plugins>
+			<!-- Plugin Spring Boot : pour le packaging et l'exécution -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Plugin Surefire : pour exécuter les tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M9</version>
+				<configuration>
+					<argLine>
+						-javaagent:${user.home}\.m2\repository\org\mockito\mockito-core\${mockito.version}\mockito-core-${mockito.version}.jar
+					</argLine>
+				</configuration>
+			</plugin>
+
+			<!-- Plugin JaCoCo : pour la couverture de code -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<executions>
+					<!-- Préparation de l'agent JaCoCo -->
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Génération du rapport de couverture -->
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
