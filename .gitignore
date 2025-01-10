@@ -6,6 +6,7 @@ target/
 
 ### Local documentation ###
 Doc/
+logs/
 
 ### STS ###
 .apt_generated
