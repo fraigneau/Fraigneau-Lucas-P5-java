@@ -6,20 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.service.DataService;
+import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
 
 @RestController
 public class RestPerson {
 
-    private final DataService dataService;
+    private final PersonService personService;
 
-    public RestPerson(DataService dataService) {
-        this.dataService = dataService;
+    public RestPerson(PersonService personService) {
+        this.personService = personService;
     }
 
     @GetMapping("/persons")
     public List<Person> getAllPersons() {
-        return dataService.getPersons();
+        return personService.getPersons();
     }
 
 }

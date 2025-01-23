@@ -6,20 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
-import fr.SafetyNet.SafetyNetAlerts.service.DataService;
+import fr.SafetyNet.SafetyNetAlerts.service.FirestationService;
 
 @RestController
 public class RestFirestation {
 
-    private final DataService dataService;
+    private final FirestationService firestationService;
 
-    public RestFirestation(DataService dataService) {
-        this.dataService = dataService;
+    public RestFirestation(FirestationService firestationService) {
+        this.firestationService = firestationService;
     }
 
     @GetMapping("/firestations")
     public List<FireStation> getAllFirestations() {
-        return dataService.getFirestations();
+        return firestationService.getFirestations();
     }
 
 }

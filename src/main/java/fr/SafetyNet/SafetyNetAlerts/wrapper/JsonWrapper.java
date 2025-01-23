@@ -6,7 +6,8 @@ import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 
-public class DataWrapper {
+public class JsonWrapper {
+
     private List<Person> persons;
     private List<FireStation> firestations;
     private List<MedicalRecord> medicalrecords;

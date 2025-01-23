@@ -10,15 +10,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.wrapper.DataWrapper;
+import fr.SafetyNet.SafetyNetAlerts.wrapper.JsonWrapper;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class DataService {
+public class JsonService {
 
-    private DataWrapper dataWrapper;
+    private JsonWrapper JsonWrapper;
 
-    public DataService() {
+    public JsonService() {
     }
 
     @PostConstruct
@@ -31,7 +31,7 @@ public class DataService {
         }
 
         try {
-            dataWrapper = objectMapper.readValue(inputStream, DataWrapper.class);
+            JsonWrapper = objectMapper.readValue(inputStream, JsonWrapper.class);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Erreur lors de la désérialisation du fichier JSON", e);
@@ -39,15 +39,15 @@ public class DataService {
     }
 
     public List<Person> getPersons() {
-        return dataWrapper.getPersons();
+        return JsonWrapper.getPersons();
     }
 
     public List<FireStation> getFirestations() {
-        return dataWrapper.getFirestations();
+        return JsonWrapper.getFirestations();
     }
 
     public List<MedicalRecord> getMedicalrecords() {
-        return dataWrapper.getMedicalrecords();
+        return JsonWrapper.getMedicalrecords();
     }
 
 }
