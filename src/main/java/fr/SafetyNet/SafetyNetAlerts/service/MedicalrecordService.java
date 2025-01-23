@@ -20,7 +20,7 @@ public class MedicalrecordService {
         this.medicalRecords = jsonService.getMedicalrecords();
     }
 
-    public List<MedicalRecord> getMedicalrecords() {
+    public List<MedicalRecord> getMedicalrecordsList() {
         return medicalRecords;
     }
 

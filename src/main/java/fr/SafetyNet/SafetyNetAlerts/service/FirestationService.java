@@ -20,7 +20,7 @@ public class FirestationService {
         this.fireStations = jsonService.getFirestations();
     }
 
-    public List<FireStation> getFirestations() {
+    public List<FireStation> getFirestationsList() {
         return fireStations;
     }
 }

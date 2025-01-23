@@ -1,4 +1,4 @@
-package fr.SafetyNet.SafetyNetAlerts.wrapper;
+package fr.SafetyNet.SafetyNetAlerts.DAO;
 
 import java.util.List;
 

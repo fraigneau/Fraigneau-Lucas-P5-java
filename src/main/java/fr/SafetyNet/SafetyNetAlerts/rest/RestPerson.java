@@ -3,6 +3,7 @@ package fr.SafetyNet.SafetyNetAlerts.rest;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
@@ -18,8 +19,13 @@ public class RestPerson {
     }
 
     @GetMapping("/persons")
-    public List<Person> getAllPersons() {
-        return personService.getPersons();
+    public List<Person> getPersonsList() {
+        return personService.getPersonsList();
+    }
+
+    @GetMapping("person/{firstName}.{lastName}")
+    public Person getOnePerson(@PathVariable String firstName, @PathVariable String lastName) {
+        return personService.findPersonByName(firstName, lastName);
     }
 
 }

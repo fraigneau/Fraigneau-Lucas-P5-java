@@ -20,8 +20,17 @@ public class PersonService {
         this.persons = jsonService.getPersons();
     }
 
-    public List<Person> getPersons() {
+    public List<Person> getPersonsList() {
         return persons;
+    }
+
+    public Person findPersonByName(String firstName, String lastName) {
+        for (Person person : persons) {
+            if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
+                return person;
+            }
+        }
+        return null;
     }
 
 }

@@ -18,8 +18,8 @@ public class RestMedicalrecord {
     }
 
     @GetMapping("/medicalrecords")
-    public List<MedicalRecord> getAllMedicalRecords() {
-        return medicalrecordService.getMedicalrecords();
+    public List<MedicalRecord> getAllMedicalRecordsList() {
+        return medicalrecordService.getMedicalrecordsList();
     }
 
 }

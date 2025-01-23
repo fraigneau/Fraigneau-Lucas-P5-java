@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.SafetyNet.SafetyNetAlerts.DAO.JsonWrapper;
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.wrapper.JsonWrapper;
 import jakarta.annotation.PostConstruct;
 
 @Service
