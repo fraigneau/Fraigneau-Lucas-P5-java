@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.SafetyNet.SafetyNetAlerts.DAO.JsonWrapper;
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 
 @Service
@@ -16,8 +17,8 @@ public class FirestationService {
     }
 
     @Autowired
-    public FirestationService(JsonService jsonService) {
-        this.fireStations = jsonService.getFirestations();
+    public FirestationService(JsonWrapper jsonWrapper) {
+        this.fireStations = jsonWrapper.getFirestations();
     }
 
     public List<FireStation> getFirestationsList() {
