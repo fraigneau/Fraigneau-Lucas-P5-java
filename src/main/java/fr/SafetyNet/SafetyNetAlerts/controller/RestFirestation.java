@@ -1,4 +1,4 @@
-package fr.SafetyNet.SafetyNetAlerts.rest;
+package fr.SafetyNet.SafetyNetAlerts.controller;
 
 import java.util.List;
 

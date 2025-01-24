@@ -1,12 +1,13 @@
 package fr.SafetyNet.SafetyNetAlerts.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.SafetyNet.SafetyNetAlerts.DAO.JsonWrapper;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
+import fr.SafetyNet.SafetyNetAlerts.repositories.JsonWrapper;
 
 @Service
 public class MedicalrecordService {
@@ -17,8 +18,8 @@ public class MedicalrecordService {
     }
 
     @Autowired
-    public MedicalrecordService(JsonWrapper jsonWrapper) {
-        this.medicalRecords = jsonWrapper.getMedicalrecords();
+    public MedicalrecordService(JsonWrapper jsonWrapper) throws IOException {
+        this.medicalRecords = jsonWrapper.getList(MedicalRecord.class);
     }
 
     public List<MedicalRecord> getMedicalrecordsList() {
