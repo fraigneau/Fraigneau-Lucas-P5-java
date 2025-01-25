@@ -19,7 +19,7 @@ public class RestFirestation {
 
     @GetMapping("/firestations")
     public List<FireStation> getAllFirestationsList() {
-        return firestationService.getFirestationsList();
+        return firestationService.getAll();
     }
 
 }

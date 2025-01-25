@@ -19,7 +19,7 @@ public class RestMedicalrecord {
 
     @GetMapping("/medicalrecords")
     public List<MedicalRecord> getAllMedicalRecordsList() {
-        return medicalrecordService.getMedicalrecordsList();
+        return medicalrecordService.getAll();
     }
 
 }

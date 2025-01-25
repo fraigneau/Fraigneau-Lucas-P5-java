@@ -2,16 +2,16 @@ package fr.SafetyNet.SafetyNetAlerts.service;
 
 import java.util.List;
 
-public interface CrudService {
+public interface CrudService<T> {
 
-    public List<Object> getAll();
+    public List<T> getAll();
 
-    public Object findById();
+    public T findById(String... args);
 
-    public Object CreateById();
+    public T Create();
 
-    public Object deleteById();
+    public void deleteById();
 
-    public Object update();
+    public T update();
 
 }

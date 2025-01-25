@@ -10,7 +10,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.repositories.JsonWrapper;
 
 @Service
-public class MedicalrecordService {
+public class MedicalrecordService implements CrudService<MedicalRecord> {
 
     private List<MedicalRecord> medicalRecords;
 
@@ -22,8 +22,33 @@ public class MedicalrecordService {
         this.medicalRecords = jsonWrapper.getList(MedicalRecord.class);
     }
 
-    public List<MedicalRecord> getMedicalrecordsList() {
+    @Override
+    public List<MedicalRecord> getAll() {
         return medicalRecords;
+    }
+
+    @Override
+    public MedicalRecord findById(String... args) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    @Override
+    public MedicalRecord Create() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'Create'");
+    }
+
+    @Override
+    public void deleteById() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    }
+
+    @Override
+    public MedicalRecord update() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
 }

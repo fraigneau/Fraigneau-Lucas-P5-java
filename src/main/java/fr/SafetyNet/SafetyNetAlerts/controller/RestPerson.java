@@ -20,12 +20,12 @@ public class RestPerson {
 
     @GetMapping("/persons")
     public List<Person> getPersonsList() {
-        return personService.getPersonsList();
+        return personService.getAll();
     }
 
     @GetMapping("person/{firstName}.{lastName}")
     public Person getOnePerson(@PathVariable String firstName, @PathVariable String lastName) {
-        return personService.findPersonByName(firstName, lastName);
+        return personService.findById(firstName, lastName);
     }
 
 }
