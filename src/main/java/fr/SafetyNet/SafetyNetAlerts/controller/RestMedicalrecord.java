@@ -17,7 +17,7 @@ public class RestMedicalrecord {
         this.medicalrecordService = medicalrecordService;
     }
 
-    @GetMapping("/medicalrecords")
+    @GetMapping("/medicalrecord")
     public List<MedicalRecord> getAllMedicalRecordsList() {
         return medicalrecordService.getAll();
     }

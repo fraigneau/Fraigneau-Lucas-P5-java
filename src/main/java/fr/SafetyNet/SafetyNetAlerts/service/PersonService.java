@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.repositories.JsonWrapper;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonWrapper;
 
 @Service
 public class PersonService implements CrudService<Person> {

@@ -1,4 +1,4 @@
-package fr.SafetyNet.SafetyNetAlerts.repositories;
+package fr.SafetyNet.SafetyNetAlerts.repository;
 
 import java.io.File;
 import java.io.IOException;

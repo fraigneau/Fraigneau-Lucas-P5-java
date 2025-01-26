@@ -17,7 +17,7 @@ public class RestFirestation {
         this.firestationService = firestationService;
     }
 
-    @GetMapping("/firestations")
+    @GetMapping("/firestation")
     public List<FireStation> getAllFirestationsList() {
         return firestationService.getAll();
     }
