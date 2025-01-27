@@ -3,6 +3,8 @@ package fr.SafetyNet.SafetyNetAlerts.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
 
     private List<MedicalRecord> medicalRecords;
     private JsonDataRepository jsonWrapper;
+    private static final Logger logger = LoggerFactory.getLogger(MedicalrecordService.class);
 
     public MedicalrecordService() {
     }
@@ -72,8 +75,19 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
 
     @Override
     public MedicalRecord update(MedicalRecord updatedMedicalRecord, String... args) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        boolean found = false;
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            if (medicalRecord.getFirstName().equals(args[0]) &&
+                    medicalRecord.getLastName().equals(args[1])) {
+                int index = medicalRecords.indexOf(medicalRecord);
+                medicalRecords.set(index, updatedMedicalRecord);
+                found = true;
+            }
+        }
+        if (!found)
+            logger.error("{} not found", updatedMedicalRecord.getFirstName() +
+                    " " + updatedMedicalRecord.getLastName());
+        return updatedMedicalRecord;
     }
 
 }
