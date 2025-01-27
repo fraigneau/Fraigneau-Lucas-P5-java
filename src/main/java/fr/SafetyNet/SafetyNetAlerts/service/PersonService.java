@@ -7,18 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.repository.JsonWrapper;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
 public class PersonService implements CrudService<Person> {
 
     private List<Person> persons;
+    private JsonDataRepository jsonWrapper;
 
     public PersonService() {
     }
 
     @Autowired
-    public PersonService(JsonWrapper jsonWrapper) throws IOException {
+    public PersonService(JsonDataRepository jsonWrapper) throws IOException {
+        this.jsonWrapper = jsonWrapper;
         this.persons = jsonWrapper.getList(Person.class);
     }
 
@@ -32,11 +34,9 @@ public class PersonService implements CrudService<Person> {
         if (args.length != 2) {
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
-        String firstName = args[0];
-        String lastName = args[1];
 
-        for (Person person : persons) {
-            if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
+        for (Person person : persons) { // firstname and lastname
+            if (person.getFirstName().equals(args[0]) && person.getLastName().equals(args[1])) {
                 return person;
             }
         }
@@ -44,9 +44,15 @@ public class PersonService implements CrudService<Person> {
     }
 
     @Override
-    public Person Create() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'CreateById'");
+    public Person Create(Person newPerson) {
+        try {
+            persons.add(newPerson);
+            jsonWrapper.setList(Person.class, persons);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return newPerson;
     }
 
     @Override

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class RestPerson {
@@ -26,6 +28,12 @@ public class RestPerson {
     @GetMapping("person/{firstName}.{lastName}")
     public Person getOnePerson(@PathVariable String firstName, @PathVariable String lastName) {
         return personService.findById(firstName, lastName);
+    }
+
+    @PostMapping("/person")
+    public Person postPerson(@RequestBody Person person) {
+        personService.Create(person);
+        return person;
     }
 
 }

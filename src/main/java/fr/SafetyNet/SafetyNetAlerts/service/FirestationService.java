@@ -7,18 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
-import fr.SafetyNet.SafetyNetAlerts.repository.JsonWrapper;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
 public class FirestationService implements CrudService<FireStation> {
 
     private List<FireStation> fireStations;
+    private JsonDataRepository jsonWrapper;
 
     public FirestationService() {
     }
 
     @Autowired
-    public FirestationService(JsonWrapper jsonWrapper) throws IOException {
+    public FirestationService(JsonDataRepository jsonWrapper) throws IOException {
         this.fireStations = jsonWrapper.getList(FireStation.class);
     }
 
@@ -34,9 +35,15 @@ public class FirestationService implements CrudService<FireStation> {
     }
 
     @Override
-    public FireStation Create() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Create'");
+    public FireStation Create(FireStation newFireStation) {
+        try {
+            fireStations.add(newFireStation);
+            jsonWrapper.setList(FireStation.class, fireStations);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return newFireStation;
     }
 
     @Override

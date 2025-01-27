@@ -8,7 +8,7 @@ public interface CrudService<T> {
 
     public T findById(String... args);
 
-    public T Create();
+    public T Create(T newObject);
 
     public void deleteById();
 

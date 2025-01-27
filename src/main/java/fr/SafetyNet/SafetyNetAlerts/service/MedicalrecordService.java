@@ -7,18 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
-import fr.SafetyNet.SafetyNetAlerts.repository.JsonWrapper;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
 public class MedicalrecordService implements CrudService<MedicalRecord> {
 
     private List<MedicalRecord> medicalRecords;
+    private JsonDataRepository jsonWrapper;
 
     public MedicalrecordService() {
     }
 
     @Autowired
-    public MedicalrecordService(JsonWrapper jsonWrapper) throws IOException {
+    public MedicalrecordService(JsonDataRepository jsonWrapper) throws IOException {
         this.medicalRecords = jsonWrapper.getList(MedicalRecord.class);
     }
 
@@ -34,9 +35,15 @@ public class MedicalrecordService implements CrudService<MedicalRecord> {
     }
 
     @Override
-    public MedicalRecord Create() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Create'");
+    public MedicalRecord Create(MedicalRecord newMedicalRecord) {
+        try {
+            medicalRecords.add(newMedicalRecord);
+            jsonWrapper.setList(MedicalRecord.class, medicalRecords);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return newMedicalRecord;
     }
 
     @Override
