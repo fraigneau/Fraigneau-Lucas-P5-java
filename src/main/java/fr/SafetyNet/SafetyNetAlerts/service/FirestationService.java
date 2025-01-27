@@ -10,7 +10,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class FirestationService implements RepositoryService<FireStation> {
+public class FirestationService implements GenericService<FireStation> {
 
     private List<FireStation> fireStations;
     private JsonDataRepository jsonWrapper;

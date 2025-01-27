@@ -2,7 +2,7 @@ package fr.SafetyNet.SafetyNetAlerts.service;
 
 import java.util.List;
 
-public interface RepositoryService<T> {
+public interface GenericService<T> {
 
     public List<T> readAll();
 

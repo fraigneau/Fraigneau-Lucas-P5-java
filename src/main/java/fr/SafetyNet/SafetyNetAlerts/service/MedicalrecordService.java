@@ -10,7 +10,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class MedicalrecordService implements RepositoryService<MedicalRecord> {
+public class MedicalrecordService implements GenericService<MedicalRecord> {
 
     private List<MedicalRecord> medicalRecords;
     private JsonDataRepository jsonWrapper;

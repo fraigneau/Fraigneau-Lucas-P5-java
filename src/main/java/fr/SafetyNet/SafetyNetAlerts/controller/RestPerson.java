@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-public class RestPerson implements CrudRestController<Person> {
+public class RestPerson {
 
     private final PersonService personService;
 
@@ -28,8 +28,8 @@ public class RestPerson implements CrudRestController<Person> {
     }
 
     @GetMapping("person/{firstName}.{lastName}")
-    public Person readById(@PathVariable String... args) {
-        return personService.readById(args[0], args[1]);
+    public Person readById(@PathVariable String firstName, @PathVariable String lastName) {
+        return personService.readById(firstName, lastName);
     }
 
     @PostMapping("/person")
@@ -39,14 +39,14 @@ public class RestPerson implements CrudRestController<Person> {
     }
 
     @DeleteMapping("/person/{firstName}.{lastName}")
-    public void delete(@PathVariable String... args) {
-        personService.deleteById(args[0], args[1]);
+    public void delete(@PathVariable String firstName, @PathVariable String lastName) {
+        personService.deleteById(firstName, lastName);
     }
 
     @PutMapping("/person/{firstName}.{lastName}")
     public Person update(@RequestBody Person updatedPerson,
-            @PathVariable String... args) {
-        personService.update(updatedPerson, args[0], args[1]);
+            @PathVariable String firstName, @PathVariable String lastName) {
+        personService.update(updatedPerson, firstName, lastName);
         return updatedPerson;
     }
 }

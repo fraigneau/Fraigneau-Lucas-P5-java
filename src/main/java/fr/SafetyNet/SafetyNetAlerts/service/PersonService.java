@@ -12,7 +12,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class PersonService implements RepositoryService<Person> {
+public class PersonService implements GenericService<Person> {
 
     private List<Person> persons;
     private JsonDataRepository jsonWrapper;
