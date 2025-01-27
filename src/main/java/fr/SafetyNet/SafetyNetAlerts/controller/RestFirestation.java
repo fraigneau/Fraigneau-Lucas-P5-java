@@ -22,12 +22,12 @@ public class RestFirestation {
 
     @GetMapping("/firestation")
     public List<FireStation> getFirestationsList() {
-        return firestationService.getAll();
+        return firestationService.readAll();
     }
 
     @GetMapping("firestation/{adress}")
     public FireStation getOneMedicalrecord(@PathVariable String adress) {
-        return firestationService.findById(adress);
+        return firestationService.readById(adress);
     }
 
     @PostMapping("/firestation")

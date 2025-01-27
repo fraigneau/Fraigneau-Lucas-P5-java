@@ -10,7 +10,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class FirestationService implements CrudService<FireStation> {
+public class FirestationService implements RepositoryService<FireStation> {
 
     private List<FireStation> fireStations;
     private JsonDataRepository jsonWrapper;
@@ -25,12 +25,12 @@ public class FirestationService implements CrudService<FireStation> {
     }
 
     @Override
-    public List<FireStation> getAll() {
+    public List<FireStation> readAll() {
         return fireStations;
     }
 
     @Override
-    public FireStation findById(String... args) {
+    public FireStation readById(String... args) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
@@ -56,13 +56,22 @@ public class FirestationService implements CrudService<FireStation> {
     }
 
     @Override
-    public void deleteById() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public void deleteById(String... args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
+        }
+
+        fireStations.remove(readById(args));
+        try {
+            jsonWrapper.setList(FireStation.class, fireStations);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public FireStation update() {
+    public FireStation update(FireStation updatedFireStation, String... args) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }

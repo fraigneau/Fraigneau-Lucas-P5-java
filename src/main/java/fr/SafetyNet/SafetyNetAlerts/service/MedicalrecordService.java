@@ -10,7 +10,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class MedicalrecordService implements CrudService<MedicalRecord> {
+public class MedicalrecordService implements RepositoryService<MedicalRecord> {
 
     private List<MedicalRecord> medicalRecords;
     private JsonDataRepository jsonWrapper;
@@ -25,12 +25,12 @@ public class MedicalrecordService implements CrudService<MedicalRecord> {
     }
 
     @Override
-    public List<MedicalRecord> getAll() {
+    public List<MedicalRecord> readAll() {
         return medicalRecords;
     }
 
     @Override
-    public MedicalRecord findById(String... args) {
+    public MedicalRecord readById(String... args) {
         if (args.length != 2) {
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
@@ -56,13 +56,22 @@ public class MedicalrecordService implements CrudService<MedicalRecord> {
     }
 
     @Override
-    public void deleteById() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    public void deleteById(String... args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
+        }
+
+        medicalRecords.remove(readById(args));
+        try {
+            jsonWrapper.setList(MedicalRecord.class, medicalRecords);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public MedicalRecord update() {
+    public MedicalRecord update(MedicalRecord updatedMedicalRecord, String... args) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }

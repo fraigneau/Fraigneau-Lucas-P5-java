@@ -22,12 +22,12 @@ public class RestMedicalrecord {
 
     @GetMapping("/medicalrecord")
     public List<MedicalRecord> getMedicalRecordsList() {
-        return medicalrecordService.getAll();
+        return medicalrecordService.readAll();
     }
 
     @GetMapping("medicalrecord/{firstName}.{lastName}")
     public MedicalRecord getOneMedicalrecord(@PathVariable String firstName, @PathVariable String lastName) {
-        return medicalrecordService.findById(firstName, lastName);
+        return medicalrecordService.readById(firstName, lastName);
     }
 
     @PostMapping("/medicalrecord")
