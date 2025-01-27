@@ -230,7 +230,8 @@
     { "address": "112 Steppes Pl", "station": "4" },
     { "address": "947 E. Rose Dr", "station": "1" },
     { "address": "748 Townings Dr", "station": "3" },
-    { "address": "951 LoneTree Rd", "station": "2" }
+    { "address": "951 LoneTree Rd", "station": "2" },
+    { "address": "2 rue test", "station": "95" }
   ],
   "medicalrecords": [
     {
@@ -398,6 +399,13 @@
       "birthdate": "08/06/1945",
       "medications": ["tradoxidine:400mg"],
       "allergies": []
+    },
+    {
+      "firstName": "Lucas",
+      "lastName": "Fraigneau",
+      "birthdate": "20/08/2000",
+      "medications": ["aznol:300g", "hydrapermazol:200g"],
+      "allergies": ["test13134"]
     }
   ]
 }

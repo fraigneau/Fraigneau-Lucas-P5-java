@@ -31,9 +31,9 @@ public class RestMedicalrecord {
     }
 
     @PostMapping("/medicalrecord")
-    public MedicalRecord postMedicalrecord(@RequestBody MedicalRecord person) {
-        medicalrecordService.Create(person);
-        return person;
+    public MedicalRecord postMedicalrecord(@RequestBody MedicalRecord medicalRecord) {
+        medicalrecordService.Create(medicalRecord);
+        return medicalRecord;
     }
 
 }

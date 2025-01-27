@@ -20,6 +20,7 @@ public class MedicalrecordService implements CrudService<MedicalRecord> {
 
     @Autowired
     public MedicalrecordService(JsonDataRepository jsonWrapper) throws IOException {
+        this.jsonWrapper = jsonWrapper;
         this.medicalRecords = jsonWrapper.getList(MedicalRecord.class);
     }
 
@@ -30,8 +31,16 @@ public class MedicalrecordService implements CrudService<MedicalRecord> {
 
     @Override
     public MedicalRecord findById(String... args) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
+        }
+
+        for (MedicalRecord medicalRecord : medicalRecords) { // firstname and lastname
+            if (medicalRecord.getFirstName().equals(args[0]) && medicalRecord.getLastName().equals(args[1])) {
+                return medicalRecord;
+            }
+        }
+        return null;
     }
 
     @Override

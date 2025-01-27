@@ -20,6 +20,7 @@ public class FirestationService implements CrudService<FireStation> {
 
     @Autowired
     public FirestationService(JsonDataRepository jsonWrapper) throws IOException {
+        this.jsonWrapper = jsonWrapper;
         this.fireStations = jsonWrapper.getList(FireStation.class);
     }
 
@@ -30,8 +31,16 @@ public class FirestationService implements CrudService<FireStation> {
 
     @Override
     public FireStation findById(String... args) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
+        }
+
+        for (FireStation fireStation : fireStations) { // firstname and lastname
+            if (fireStation.getAddress().equals(args[0])) {
+                return fireStation;
+            }
+        }
+        return null;
     }
 
     @Override
