@@ -35,14 +35,17 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
     @Override
     public MedicalRecord readById(String... args) {
         if (args.length != 2) {
+            logger.error("Expected 2 arguments, got {}", args.length);
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
 
         for (MedicalRecord medicalRecord : medicalRecords) { // firstname and lastname
             if (medicalRecord.getFirstName().equals(args[0]) && medicalRecord.getLastName().equals(args[1])) {
+                logger.info("MedicalRecord found");
                 return medicalRecord;
             }
         }
+        logger.error("MedicalRecord not found");
         return null;
     }
 
@@ -51,8 +54,10 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
         try {
             medicalRecords.add(newMedicalRecord);
             jsonWrapper.setList(MedicalRecord.class, medicalRecords);
+            logger.info("MedicalRecord {} {} created successfully", newMedicalRecord.getFirstName(),
+                    newMedicalRecord.getLastName());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            logger.error("Error creating MedicalRecord");
             e.printStackTrace();
         }
         return newMedicalRecord;
@@ -61,14 +66,16 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
     @Override
     public void deleteById(String... args) {
         if (args.length != 2) {
+            logger.error("Expected 2 arguments, got {}", args.length);
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
 
         medicalRecords.remove(readById(args));
         try {
             jsonWrapper.setList(MedicalRecord.class, medicalRecords);
+            logger.info("MedicalRecord {} {} deleted successfully", args[0], args[1]);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            logger.error("Error deleting MedicalRecord");
             e.printStackTrace();
         }
     }
@@ -87,6 +94,8 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
         if (!found)
             logger.error("{} not found", updatedMedicalRecord.getFirstName() +
                     " " + updatedMedicalRecord.getLastName());
+        logger.info("MedicalRecord {} {} updated successfully", updatedMedicalRecord.getFirstName(),
+                updatedMedicalRecord.getLastName());
         return updatedMedicalRecord;
     }
 

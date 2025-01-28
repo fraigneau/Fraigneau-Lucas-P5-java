@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 public class RestPerson {
@@ -33,9 +33,8 @@ public class RestPerson {
     }
 
     @PostMapping("/person")
-    public Person create(@RequestBody Person person) {
+    public void create(@RequestBody Person person) {
         personService.Create(person);
-        return person;
     }
 
     @DeleteMapping("/person/{firstName}.{lastName}")
@@ -44,9 +43,8 @@ public class RestPerson {
     }
 
     @PutMapping("/person/{firstName}.{lastName}")
-    public Person update(@RequestBody Person updatedPerson,
+    public void update(@RequestBody Person updatedPerson,
             @PathVariable String firstName, @PathVariable String lastName) {
         personService.update(updatedPerson, firstName, lastName);
-        return updatedPerson;
     }
 }

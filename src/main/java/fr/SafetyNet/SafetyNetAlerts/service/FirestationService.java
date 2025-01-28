@@ -35,14 +35,17 @@ public class FirestationService implements GenericService<FireStation> {
     @Override
     public FireStation readById(String... args) {
         if (args.length != 1) {
+            logger.error("Expected 1 arguments, got {}", args.length);
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
 
         for (FireStation fireStation : fireStations) { // firstname and lastname
             if (fireStation.getAddress().equals(args[0])) {
+                logger.info("FireStation found");
                 return fireStation;
             }
         }
+        logger.error("FireStation not found");
         return null;
     }
 
@@ -51,8 +54,9 @@ public class FirestationService implements GenericService<FireStation> {
         try {
             fireStations.add(newFireStation);
             jsonWrapper.setList(FireStation.class, fireStations);
+            logger.info("FireStation {} created successfully", newFireStation.getAddress());
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            logger.error("Error creating FireStation");
             e.printStackTrace();
         }
         return newFireStation;
@@ -61,14 +65,16 @@ public class FirestationService implements GenericService<FireStation> {
     @Override
     public void deleteById(String... args) {
         if (args.length != 1) {
+            logger.error("Expected 1 arguments, got {}", args.length);
             throw new IllegalArgumentException("Expected 1 arguments, got " + args.length);
         }
 
         fireStations.remove(readById(args));
         try {
             jsonWrapper.setList(FireStation.class, fireStations);
+            logger.info("FireStation {} deleted successfully", args[0]);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            logger.error("Error deleting FireStation");
             e.printStackTrace();
         }
     }
@@ -85,6 +91,7 @@ public class FirestationService implements GenericService<FireStation> {
         }
         if (!found)
             logger.error("{} not found", updatedFireStation.getAddress());
+        logger.info("FireStation {} updated successfully", updatedFireStation.getAddress());
         return updatedFireStation;
     }
 
