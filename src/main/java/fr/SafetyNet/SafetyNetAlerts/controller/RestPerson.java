@@ -33,18 +33,25 @@ public class RestPerson {
     }
 
     @PostMapping("/person")
-    public void create(@RequestBody Person person) {
+    public String create(@RequestBody Person person) {
         personService.Create(person);
+        return "Person created " + person.getFirstName() + " " +
+                person.getLastName();
+
     }
 
     @DeleteMapping("/person/{firstName}.{lastName}")
-    public void delete(@PathVariable String firstName, @PathVariable String lastName) {
+    public String delete(@PathVariable String firstName, @PathVariable String lastName) {
         personService.deleteById(firstName, lastName);
+        return "Person deleted " + firstName + " " +
+                lastName;
     }
 
     @PutMapping("/person/{firstName}.{lastName}")
-    public void update(@RequestBody Person updatedPerson,
+    public String update(@RequestBody Person updatedPerson,
             @PathVariable String firstName, @PathVariable String lastName) {
         personService.update(updatedPerson, firstName, lastName);
+        return "Person created " + updatedPerson.getFirstName() + " " +
+                updatedPerson.getLastName();
     }
 }
