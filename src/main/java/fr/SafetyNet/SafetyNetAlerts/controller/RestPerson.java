@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 public class RestPerson {
@@ -33,20 +33,25 @@ public class RestPerson {
     }
 
     @PostMapping("/person")
-    public Person create(@RequestBody Person person) {
+    public String create(@RequestBody Person person) {
         personService.Create(person);
-        return person;
+        return "Person created " + person.getFirstName() + " " +
+                person.getLastName();
+
     }
 
     @DeleteMapping("/person/{firstName}.{lastName}")
-    public void delete(@PathVariable String firstName, @PathVariable String lastName) {
+    public String delete(@PathVariable String firstName, @PathVariable String lastName) {
         personService.deleteById(firstName, lastName);
+        return "Person deleted " + firstName + " " +
+                lastName;
     }
 
     @PutMapping("/person/{firstName}.{lastName}")
-    public Person update(@RequestBody Person updatedPerson,
+    public String update(@RequestBody Person updatedPerson,
             @PathVariable String firstName, @PathVariable String lastName) {
         personService.update(updatedPerson, firstName, lastName);
-        return updatedPerson;
+        return "Person created " + updatedPerson.getFirstName() + " " +
+                updatedPerson.getLastName();
     }
 }

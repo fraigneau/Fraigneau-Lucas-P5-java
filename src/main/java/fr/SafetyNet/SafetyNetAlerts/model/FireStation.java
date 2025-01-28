@@ -1,5 +1,12 @@
 package fr.SafetyNet.SafetyNetAlerts.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@ToString
 public class FireStation {
 
     private String address;
@@ -7,26 +14,4 @@ public class FireStation {
 
     public FireStation() {
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    @Override
-    public String toString() {
-        return "FireStation [address=" + address + ", station=" + station + "]";
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getStation() {
-        return station;
-    }
-
-    public void setStation(String station) {
-        this.station = station;
-    }
-
 }

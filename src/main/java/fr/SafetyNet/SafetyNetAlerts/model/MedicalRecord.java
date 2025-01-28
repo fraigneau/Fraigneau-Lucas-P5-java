@@ -2,6 +2,13 @@ package fr.SafetyNet.SafetyNetAlerts.model;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@ToString
 public class MedicalRecord {
 
     private String firstName;
@@ -12,51 +19,4 @@ public class MedicalRecord {
 
     public MedicalRecord() {
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    @Override
-    public String toString() {
-        return "MedicalRecord [firstName=" + firstName + ", lastName=" + lastName + ", birthdate=" + birthdate
-                + ", medications=" + medications + ", allergies=" + allergies + "]";
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public List<String> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(List<String> medications) {
-        this.medications = medications;
-    }
-
-    public List<String> getAllergies() {
-        return allergies;
-    }
-
-    public void setAllergies(List<String> allergies) {
-        this.allergies = allergies;
-    }
-
 }

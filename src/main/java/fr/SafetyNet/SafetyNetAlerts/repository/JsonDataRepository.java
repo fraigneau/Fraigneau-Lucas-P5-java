@@ -47,16 +47,19 @@ public class JsonDataRepository {
         JsonNode childNode = rootNode.path(JsonField(klass));
 
         if (!childNode.isArray()) {
+            logger.error("Field '{}' is not an array.", JsonField(klass));
             throw new IllegalArgumentException("Field '" + JsonField(klass) + "' is not an array.");
         }
 
         CollectionType listType = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, klass);
+        logger.info("List of {} loaded successfully", JsonField(klass));
         return objectMapper.readValue(childNode.traverse(), listType);
     }
 
     public static String JsonField(Class<?> klass) {
         String jsonField = CLASS_TO_JSON_FIELD.get(klass);
         if (jsonField == null) {
+            logger.error("No JSON field mapped for class: {}", klass.getSimpleName());
             throw new IllegalArgumentException("No JSON field mapped for class: " + klass.getSimpleName());
         }
         return jsonField;

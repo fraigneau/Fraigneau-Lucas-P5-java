@@ -33,21 +33,21 @@ public class RestMedicalrecord {
     }
 
     @PostMapping("/medicalrecord")
-    public MedicalRecord create(@RequestBody MedicalRecord medicalRecord) {
+    public String create(@RequestBody MedicalRecord medicalRecord) {
         medicalrecordService.Create(medicalRecord);
-        return medicalRecord;
+        return "Medicalrecord created " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName();
     }
 
     @DeleteMapping("/medicalrecord/{firstName}.{lastName}")
-    public void delete(@PathVariable String firstName, @PathVariable String lastName) {
+    public String delete(@PathVariable String firstName, @PathVariable String lastName) {
         medicalrecordService.deleteById(firstName, lastName);
+        return "Medicalrecord deleted " + firstName + " " + lastName;
     }
 
     @PutMapping("/medicalrecord/{firstName}.{lastName}")
-    public MedicalRecord update(@RequestBody MedicalRecord updatedPerson,
+    public String update(@RequestBody MedicalRecord updatedRecord,
             @PathVariable String firstName, @PathVariable String lastName) {
-        medicalrecordService.update(updatedPerson, firstName, lastName);
-        return updatedPerson;
+        medicalrecordService.update(updatedRecord, firstName, lastName);
+        return "Medicalrecord updated " + updatedRecord.getFirstName() + " " + updatedRecord.getLastName();
     }
-
 }
