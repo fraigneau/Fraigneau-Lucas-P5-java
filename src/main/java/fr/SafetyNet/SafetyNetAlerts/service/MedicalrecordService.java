@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
@@ -46,10 +47,10 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
             }
         }
         logger.error("MedicalRecord not found");
-        return null;
+        throw new ResourceNotFoundException("MedicalRecord not found -> " + args[0] + ", " + args[1]);
     }
 
-    @Override
+    @Override // TODO existing person
     public MedicalRecord Create(MedicalRecord newMedicalRecord) {
         try {
             medicalRecords.add(newMedicalRecord);
@@ -91,9 +92,11 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
                 found = true;
             }
         }
-        if (!found)
+        if (!found) {
             logger.error("{} not found", updatedMedicalRecord.getFirstName() +
                     " " + updatedMedicalRecord.getLastName());
+            throw new ResourceNotFoundException("MedicalRecord not found -> " + args[0] + ", " + args[1]);
+        }
         logger.info("MedicalRecord {} {} updated successfully", updatedMedicalRecord.getFirstName(),
                 updatedMedicalRecord.getLastName());
         return updatedMedicalRecord;

@@ -37,11 +37,11 @@ public class PersonService implements GenericService<Person> {
 
     @Override
     public Person readById(String... args) {
-        // if (args.length != 2) {
-        // logger.error("Expected 2 arguments, got {}", args.length);
-        // throw new IllegalArgumentException("Expected 2 arguments, got " +
-        // args.length);
-        // }
+        if (args.length != 2) {
+            logger.error("Expected 2 arguments, got {}", args.length);
+            throw new IllegalArgumentException("Expected 2 arguments, got " +
+                    args.length);
+        }
 
         for (Person person : persons) { // firstname and lastname
             if (person.getFirstName().equals(args[0]) && person.getLastName().equals(args[1])) {
@@ -50,10 +50,10 @@ public class PersonService implements GenericService<Person> {
             }
         }
         logger.error("Person not found");
-        throw new ResourceNotFoundException("Person not found2");
+        throw new ResourceNotFoundException("Person not found -> " + args[0] + ", " + args[1]);
     }
 
-    @Override
+    @Override // TODO existing person
     public Person Create(Person newPerson) {
         try {
             persons.add(newPerson);
@@ -94,9 +94,11 @@ public class PersonService implements GenericService<Person> {
                 found = true;
             }
         }
-        if (!found)
+        if (!found) {
             logger.error("{} not found", updatedPerson.getFirstName() +
                     " " + updatedPerson.getLastName());
+            throw new ResourceNotFoundException("Person not found -> " + args[0] + ", " + args[1]);
+        }
         logger.info("Person {} {} updated successfully", updatedPerson.getFirstName(),
                 updatedPerson.getLastName());
         return updatedPerson;
