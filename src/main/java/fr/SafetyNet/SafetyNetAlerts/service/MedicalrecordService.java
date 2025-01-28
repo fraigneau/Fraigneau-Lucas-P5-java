@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
 import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
 import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
@@ -50,8 +51,19 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
         throw new ResourceNotFoundException("MedicalRecord not found -> " + args[0] + ", " + args[1]);
     }
 
-    @Override // TODO existing person
+    @Override
     public MedicalRecord Create(MedicalRecord newMedicalRecord) {
+
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            if (medicalRecord.getFirstName().equals(newMedicalRecord.getFirstName())
+                    && medicalRecord.getLastName().equals(
+                            newMedicalRecord.getLastName())) {
+                logger.warn("medicalRecord already exist : {} {}",
+                        newMedicalRecord.getFirstName(), newMedicalRecord.getLastName());
+                throw new ConflictException("MedicalRecord already exist");
+            }
+        }
+
         try {
             medicalRecords.add(newMedicalRecord);
             jsonWrapper.setList(MedicalRecord.class, medicalRecords);

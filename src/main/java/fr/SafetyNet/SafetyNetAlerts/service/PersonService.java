@@ -53,8 +53,17 @@ public class PersonService implements GenericService<Person> {
         throw new ResourceNotFoundException("Person not found -> " + args[0] + ", " + args[1]);
     }
 
-    @Override // TODO existing person
+    @Override
     public Person Create(Person newPerson) {
+
+        for (Person person : persons) {
+            if (person.getFirstName().equals(newPerson.getFirstName()) && person.getLastName().equals(
+                    newPerson.getLastName())) {
+                logger.warn("Person already exist : {} {}", newPerson.getFirstName(), newPerson.getLastName());
+                throw new ConflictException("Person already exist");
+            }
+        }
+
         try {
             persons.add(newPerson);
             jsonWrapper.setList(Person.class, persons);
@@ -86,6 +95,7 @@ public class PersonService implements GenericService<Person> {
     @Override
     public Person update(Person updatedPerson, String... args) {
         boolean found = false;
+
         for (Person person : persons) {
             if (person.getFirstName().equals(args[0]) &&
                     person.getLastName().equals(args[1])) {
@@ -94,6 +104,7 @@ public class PersonService implements GenericService<Person> {
                 found = true;
             }
         }
+
         if (!found) {
             logger.error("{} not found", updatedPerson.getFirstName() +
                     " " + updatedPerson.getLastName());

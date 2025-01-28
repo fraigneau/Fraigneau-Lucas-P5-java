@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
 import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
 import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
@@ -50,8 +51,17 @@ public class FirestationService implements GenericService<FireStation> {
         throw new ResourceNotFoundException("FireStation not found -> " + args[0]);
     }
 
-    @Override // TODO existing person
+    @Override
     public FireStation Create(FireStation newFireStation) {
+
+        for (FireStation fireStation : fireStations) {
+            if (fireStation.getAddress().equals(newFireStation.getAddress())) {
+                logger.warn("FireStation already exist : {} {}",
+                        newFireStation.getAddress());
+                throw new ConflictException("FireStation already exist");
+            }
+        }
+
         try {
             fireStations.add(newFireStation);
             jsonWrapper.setList(FireStation.class, fireStations);
