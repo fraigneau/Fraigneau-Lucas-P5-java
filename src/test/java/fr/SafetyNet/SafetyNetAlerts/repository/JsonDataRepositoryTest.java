@@ -13,8 +13,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,16 +33,12 @@ class JsonDataRepositoryTest {
 
     @BeforeEach
     void copyTestFileIntoProduction() throws IOException {
-        // Avant chaque test, on remplace le data.json de prod par le fichier de test
         if (Files.exists(JSON)) {
-            // On copie l'original dans le backup
             Files.copy(JSON, PROD_JSON, StandardCopyOption.REPLACE_EXISTING);
         }
 
-        // On ré-initialise le repository
         repository = new JsonDataRepository();
-        repository.loadJsonFile(); // charge "src/main/resources/data.json" (qui est en fait notre test.json
-                                   // désormais)
+        repository.loadJsonFile();
     }
 
     @Test
@@ -57,12 +51,8 @@ class JsonDataRepositoryTest {
 
     @Test
     void testGetListPerson() throws IOException {
-        // On sait que data-test.json contient un tableau "persons"
-        // Vérifions qu'on lit correctement 2 ou 3 Person si c'est ce qu'on a mis dans
-        // data-test.json
         List<Person> persons = repository.getList(Person.class);
 
-        // Adaptez selon votre data-test.json
         assertEquals(23, persons.size(), "La taille doit correspondre aux données de test");
         assertEquals("John", persons.get(0).getFirstName(), "Premier prénom attendu");
         assertEquals("Boyd", persons.get(0).getLastName(), "Premier nom attendu");
@@ -77,11 +67,9 @@ class JsonDataRepositoryTest {
 
     @Test
     void testSetList_ShouldUpdateJsonFile() throws IOException {
-        // On lit la liste actuelle
         List<Person> initialPersons = repository.getList(Person.class);
         int initialSize = initialPersons.size();
 
-        // On ajoute un nouveau Person en mémoire
         Person newPerson = new Person();
         newPerson.setFirstName("JaketheDog");
         newPerson.setLastName("Doe");
@@ -93,10 +81,8 @@ class JsonDataRepositoryTest {
 
         initialPersons.add(newPerson);
 
-        // On écrit dans le fichier data.json
         repository.setList(Person.class, initialPersons);
 
-        // Pour vérifier, on recharge le fichier
         repository.loadJsonFile();
         List<Person> updatedPersons = repository.getList(Person.class);
 

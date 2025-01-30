@@ -1,35 +1,218 @@
 package fr.SafetyNet.SafetyNetAlerts.service;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static fr.SafetyNet.SafetyNetAlerts.service.PersonService.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-public class PersonServiceTest {
-    @Test
-    void testCreate() {
+import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
+import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
+import fr.SafetyNet.SafetyNetAlerts.model.Person;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
-        assertTrue(true);
+@ExtendWith(MockitoExtension.class)
+class PersonServiceTest {
 
+    @Mock
+    private JsonDataRepository jsonDataRepo;
+
+    @InjectMocks
+    private PersonService personService;
+
+    private List<Person> mockPersons;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        mockPersons = new ArrayList<>();
+        Person p1 = new Person();
+        p1.setFirstName("John");
+        p1.setLastName("Doe");
+        p1.setAddress("Address1");
+        p1.setCity("City1");
+        p1.setZip("Zip1");
+        p1.setPhone("Phone1");
+        p1.setEmail("Email1");
+
+        Person p2 = new Person();
+        p2.setFirstName("Jane");
+        p2.setLastName("Doe");
+        p2.setAddress("Address2");
+        p2.setCity("City2");
+        p2.setZip("Zip2");
+        p2.setPhone("Phone2");
+        p2.setEmail("Email2");
+
+        mockPersons.add(p1);
+        mockPersons.add(p2);
+
+        when(jsonDataRepo.getList(Person.class)).thenReturn(mockPersons);
+
+        personService = new PersonService(jsonDataRepo);
     }
 
     @Test
-    void testDeleteById() {
-        assertTrue(true);
+    void testReadAll() throws IOException {
+        // When
+        List<Person> persons = personService.readAll();
+
+        // Then
+        assertEquals(2, persons.size());
+        verify(jsonDataRepo, Mockito.times(2)).getList(Person.class);
     }
 
     @Test
-    void testReadAll() {
-        assertTrue(true);
+    void testReadById_Found() {
+        // Given
+        // On recherche "John", "Doe" - présent dans la liste mockPersons
+
+        // When
+        Person foundPerson = personService.readById("John", "Doe");
+
+        // Then
+        assertNotNull(foundPerson);
+        assertEquals("John", foundPerson.getFirstName());
+        assertEquals("Doe", foundPerson.getLastName());
     }
 
     @Test
-    void testReadById() {
-        assertTrue(true);
+    void testReadById_NotFound() {
+        // Given
+        // On recherche un user qui n’existe pas
+        // Then + When
+        assertThrows(ResourceNotFoundException.class, () -> {
+            personService.readById("Unknown", "Person");
+        });
     }
 
     @Test
-    void testUpdate() {
-        assertTrue(true);
+    void testCreate_Success() throws IOException {
+        // Given
+        Person newPerson = new Person();
+        newPerson.setFirstName("Bob");
+        newPerson.setLastName("Martin");
+        newPerson.setAddress("Address3");
+        newPerson.setCity("City3");
+        newPerson.setZip("Zip3");
+        newPerson.setPhone("Phone3");
+        newPerson.setEmail("Email3");
+
+        // On vérifie que l’utilisateur n’existe pas dans mockPersons
+        // When
+        Person created = personService.Create(newPerson);
+
+        // Then
+        assertNotNull(created);
+        assertEquals("Bob", created.getFirstName());
+        assertEquals(3, mockPersons.size()); // La liste doit avoir 3 éléments désormais
+
+        // Vérifie qu’on a bien sauvegardé via jsonWrapper.setList(...)
+        verify(jsonDataRepo, Mockito.times(1)).setList(Person.class, mockPersons);
     }
+
+    @Test
+    void testCreate_Conflict() throws IOException {
+        // Given
+        // p1 (John, Doe) existe déjà dans mockPersons
+        Person duplicate = new Person();
+        duplicate.setFirstName("John");
+        duplicate.setLastName("Doe");
+        duplicate.setAddress("NewAddress");
+        duplicate.setCity("NewCity");
+        duplicate.setZip("NewZip");
+        duplicate.setPhone("NewPhone");
+        duplicate.setEmail("NewEmail");
+
+        // Then + When
+        assertThrows(ConflictException.class, () -> {
+            personService.Create(duplicate);
+        });
+
+        // La taille du mockPersons ne doit pas changer
+        assertEquals(2, mockPersons.size());
+        // Pas de setList(...) appelé en cas d’exception
+        verify(jsonDataRepo, never()).setList(any(), any());
+    }
+
+    @Test
+    void testDeleteById_Success() throws IOException {
+        // Given
+        // On supprime "Jane Doe" par exemple
+        // When
+        personService.deleteById("Jane", "Doe");
+
+        // Then
+        // On attend que la liste perde un élément
+        assertEquals(1, mockPersons.size());
+
+        // On vérifie l’appel à la méthode de sauvegarde du fichier JSON
+        verify(jsonDataRepo, Mockito.times(1)).setList(Person.class, mockPersons);
+    }
+
+    @Test
+    void testDeleteById_NotFound() throws IOException {
+        // Given
+        // Personne "X", "Y" n’existe pas
+        // Then + When
+        assertThrows(ResourceNotFoundException.class, () -> {
+            personService.deleteById("X", "Y");
+        });
+        // La liste n’a pas changé
+        assertEquals(2, mockPersons.size());
+        // Pas de setList(...) appelé
+        verify(jsonDataRepo, never()).setList(any(), any());
+    }
+
+    @Test
+    void testUpdate_Success() {
+        // Given
+        // On veut mettre à jour "John Doe"
+        Person updated = new Person();
+        updated.setFirstName("John");
+        updated.setLastName("Doe");
+        updated.setAddress("UpdatedAddress");
+        updated.setCity("UpdatedCity");
+        updated.setZip("UpdatedZip");
+        updated.setPhone("UpdatedPhone");
+        updated.setEmail("UpdatedEmail");
+
+        // When
+        Person result = personService.update(updated, "John", "Doe");
+
+        // Then
+        assertNotNull(result);
+        assertEquals("UpdatedAddress", result.getAddress());
+
+        // Vérifions que la modification s’est bien faite dans la liste
+        Person p1 = mockPersons.get(0);
+        assertEquals("UpdatedAddress", p1.getAddress());
+    }
+
+    @Test
+    void testUpdate_NotFound() {
+        // Given
+        Person updated = new Person();
+        updated.setFirstName("Ghost");
+        updated.setLastName("Person");
+
+        // Then + When
+        assertThrows(ResourceNotFoundException.class, () -> {
+            personService.update(updated, "Ghost", "Person");
+        });
+    }
+
 }
