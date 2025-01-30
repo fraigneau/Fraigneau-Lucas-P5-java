@@ -14,7 +14,8 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
 
 @RestController
-public class RestPerson {
+public class RestPerson { // ! TODO test unitaire tester que les endpoint sont bien appelés
+                          // ! TODO tester les code HTTP
 
     private final PersonService personService;
 
@@ -32,12 +33,10 @@ public class RestPerson {
         return personService.readById(firstName, lastName);
     }
 
-    @PostMapping("/person")
-    public String create(@RequestBody Person person) {
+    @PostMapping("/person") // ! TODO return person au lieux des Strings !
+    public Person create(@RequestBody Person person) {
         personService.Create(person);
-        return "Person created " + person.getFirstName() + " " +
-                person.getLastName();
-
+        return person;
     }
 
     @DeleteMapping("/person/{firstName}.{lastName}")
@@ -48,10 +47,9 @@ public class RestPerson {
     }
 
     @PutMapping("/person/{firstName}.{lastName}")
-    public String update(@RequestBody Person updatedPerson,
+    public Person update(@RequestBody Person updatedPerson,
             @PathVariable String firstName, @PathVariable String lastName) {
         personService.update(updatedPerson, firstName, lastName);
-        return "Person created " + updatedPerson.getFirstName() + " " +
-                updatedPerson.getLastName();
+        return updatedPerson;
     }
 }

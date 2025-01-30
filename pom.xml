@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.4.2</version>
 		<relativePath /> <!-- Recherche du parent dans le repository -->
 	</parent>
 
@@ -62,10 +62,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Lombok : pour la génération de code -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<scope>annotationProcessor</scope>
+			<version>1.18.36</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -83,11 +85,28 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M9</version>
 				<configuration>
 					<argLine>
 						-javaagent:${user.home}\.m2\repository\org\mockito\mockito-core\${mockito.version}\mockito-core-${mockito.version}.jar
+						-javaagent:${user.home}\.m2\repository\org\jacoco\org.jacoco.agent\0.8.12\org.jacoco.agent-0.8.12-runtime.jar=destfile=${project.build.directory}\jacoco.exec
 					</argLine>
+				</configuration>
+			</plugin>
+
+			<!-- Plugin Maven Compiler : pour compiler le code -->
+			<!-- Ajout de lombok pour la compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.36</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 
@@ -97,13 +116,15 @@
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
 				<executions>
-					<!-- Préparation de l'agent JaCoCo -->
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
+						<configuration>
+							<destFile>${project.build.directory}/jacoco.exec</destFile>
+						</configuration>
 					</execution>
-					<!-- Génération du rapport de couverture -->
 					<execution>
 						<id>report</id>
 						<phase>verify</phase>

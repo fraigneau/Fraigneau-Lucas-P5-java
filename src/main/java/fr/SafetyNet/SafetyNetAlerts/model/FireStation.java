@@ -1,12 +1,10 @@
 package fr.SafetyNet.SafetyNetAlerts.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
+import lombok.Data;
 
-@Setter
-@Getter
-@ToString
+@Data
+@Generated
 public class FireStation {
 
     private String address;

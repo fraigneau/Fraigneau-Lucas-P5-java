@@ -64,7 +64,7 @@ public class PersonService implements GenericService<Person> {
             }
         }
 
-        try {
+        try { // TODO stop try catch
             persons.add(newPerson);
             jsonWrapper.setList(Person.class, persons);
             logger.info("Person {} {} created successfully", newPerson.getFirstName(), newPerson.getLastName());

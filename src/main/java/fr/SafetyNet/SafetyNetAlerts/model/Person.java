@@ -1,13 +1,10 @@
 package fr.SafetyNet.SafetyNetAlerts.model;
 
-import lombok.Getter;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
+import lombok.Data;
 
-import lombok.Setter;
-import lombok.ToString;
-
-@Setter
-@Getter
-@ToString
+@Data
+@Generated
 public class Person {
 
     private String firstName;
