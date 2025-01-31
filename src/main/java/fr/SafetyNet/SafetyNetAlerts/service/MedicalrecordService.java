@@ -70,7 +70,6 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
             logger.info("MedicalRecord {} {} created successfully", newMedicalRecord.getFirstName(),
                     newMedicalRecord.getLastName());
         } catch (IOException e) {
-            logger.error("Error creating MedicalRecord");
             e.printStackTrace();
         }
         return newMedicalRecord;
@@ -88,7 +87,6 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
             jsonWrapper.setList(MedicalRecord.class, medicalRecords);
             logger.info("MedicalRecord {} {} deleted successfully", args[0], args[1]);
         } catch (IOException e) {
-            logger.error("Error deleting MedicalRecord");
             e.printStackTrace();
         }
     }

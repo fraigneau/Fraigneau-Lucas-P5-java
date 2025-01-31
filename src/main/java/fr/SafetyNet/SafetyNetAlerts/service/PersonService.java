@@ -64,12 +64,11 @@ public class PersonService implements GenericService<Person> {
             }
         }
 
-        try { // TODO stop try catch
+        try {
             persons.add(newPerson);
             jsonWrapper.setList(Person.class, persons);
             logger.info("Person {} {} created successfully", newPerson.getFirstName(), newPerson.getLastName());
         } catch (IOException e) {
-            logger.error("Error creating person");
             e.printStackTrace();
         }
         return newPerson;
@@ -87,7 +86,6 @@ public class PersonService implements GenericService<Person> {
             jsonWrapper.setList(Person.class, persons);
             logger.info("Person {} {} deleted successfully", args[0], args[1]);
         } catch (IOException e) {
-            logger.error("Error deleting person");
             e.printStackTrace();
         }
     }

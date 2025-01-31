@@ -67,7 +67,6 @@ public class FirestationService implements GenericService<FireStation> {
             jsonWrapper.setList(FireStation.class, fireStations);
             logger.info("FireStation {} created successfully", newFireStation.getAddress());
         } catch (IOException e) {
-            logger.error("Error creating FireStation");
             e.printStackTrace();
         }
         return newFireStation;
@@ -85,7 +84,6 @@ public class FirestationService implements GenericService<FireStation> {
             jsonWrapper.setList(FireStation.class, fireStations);
             logger.info("FireStation {} deleted successfully", args[0]);
         } catch (IOException e) {
-            logger.error("Error deleting FireStation");
             e.printStackTrace();
         }
     }
