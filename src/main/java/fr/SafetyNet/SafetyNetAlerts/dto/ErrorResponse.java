@@ -1,4 +1,4 @@
-package fr.SafetyNet.SafetyNetAlerts.exception;
+package fr.SafetyNet.SafetyNetAlerts.dto;
 
 import java.time.LocalDateTime;
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import fr.SafetyNet.SafetyNetAlerts.dto.ErrorResponse;
 import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
 @RestControllerAdvice

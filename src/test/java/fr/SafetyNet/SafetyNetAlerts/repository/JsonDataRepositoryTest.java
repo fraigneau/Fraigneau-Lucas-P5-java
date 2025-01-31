@@ -18,14 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 
-/**
- * Test de la classe JsonDataRepository sans modifier son code:
- * On copie manuellement le fichier de test dans src/main/resources/data.json
- * puis on restaure l'original à la fin.
- */
 class JsonDataRepositoryTest {
 
-    // Les chemins vers les fichiers
     private static final Path JSON = Paths.get("Doc/data.json");
     private static final Path PROD_JSON = Paths.get("src/main/resources/data.json");
 
