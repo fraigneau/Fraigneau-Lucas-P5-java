@@ -41,7 +41,7 @@ public class FirestationService implements GenericService<FireStation> {
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
 
-        for (FireStation fireStation : fireStations) { // firstname and lastname
+        for (FireStation fireStation : fireStations) {
             if (fireStation.getAddress().equals(args[0])) {
                 logger.info("FireStation found");
                 return fireStation;
@@ -52,7 +52,7 @@ public class FirestationService implements GenericService<FireStation> {
     }
 
     @Override
-    public FireStation Create(FireStation newFireStation) {
+    public FireStation create(FireStation newFireStation) {
 
         for (FireStation fireStation : fireStations) {
             if (fireStation.getAddress().equals(newFireStation.getAddress())) {

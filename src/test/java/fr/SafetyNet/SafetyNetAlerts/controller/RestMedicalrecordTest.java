@@ -48,7 +48,7 @@ public class RestMedicalrecordTest {
     @Test
     void testCreate() throws Exception {
         MedicalRecord medicalRecord = new MedicalRecord();
-        when(medicalrecordService.Create(any(MedicalRecord.class))).thenReturn(medicalRecord);
+        when(medicalrecordService.create(any(MedicalRecord.class))).thenReturn(medicalRecord);
 
         String postBody = "{\"firstName\":\"test\", \"lastName\":\"test\", \"birthdate\":\"01/01/2000\", \"medications\":[\"med1:500mg\"], \"allergies\":[\"peanut\"]}";
 

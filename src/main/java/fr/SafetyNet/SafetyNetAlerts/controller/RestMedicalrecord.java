@@ -34,7 +34,7 @@ public class RestMedicalrecord {
 
     @PostMapping("/medicalrecord")
     public String create(@RequestBody MedicalRecord medicalRecord) {
-        medicalrecordService.Create(medicalRecord);
+        medicalrecordService.create(medicalRecord);
         return "Medicalrecord created " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName();
     }
 

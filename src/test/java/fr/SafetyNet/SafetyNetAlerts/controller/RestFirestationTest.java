@@ -47,7 +47,7 @@ public class RestFirestationTest {
     @Test
     void testCreate() throws Exception {
         FireStation fireStation = new FireStation();
-        when(firestationService.Create(any(FireStation.class))).thenReturn(fireStation);
+        when(firestationService.create(any(FireStation.class))).thenReturn(fireStation);
 
         String postBody = "{\"address\":\"testAddress\", \"station\":\"1\"}";
 

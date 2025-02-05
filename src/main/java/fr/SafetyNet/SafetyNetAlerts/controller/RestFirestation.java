@@ -34,7 +34,7 @@ public class RestFirestation {
 
     @PostMapping("/firestation")
     public String create(@RequestBody FireStation fireStation) {
-        firestationService.Create(fireStation);
+        firestationService.create(fireStation);
         return "Firestation created at address: " + fireStation.getAddress();
     }
 

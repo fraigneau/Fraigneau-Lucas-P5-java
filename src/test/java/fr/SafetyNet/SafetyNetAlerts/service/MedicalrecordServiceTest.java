@@ -92,7 +92,7 @@ class MedicalrecordServiceTest {
         newRecord.setMedications(List.of("med4"));
         newRecord.setAllergies(List.of("allergy4"));
 
-        MedicalRecord created = medicalrecordService.Create(newRecord);
+        MedicalRecord created = medicalrecordService.create(newRecord);
 
         assertNotNull(created);
         assertEquals("Bob", created.getFirstName());
@@ -110,7 +110,7 @@ class MedicalrecordServiceTest {
         duplicate.setAllergies(List.of("allergy5"));
 
         assertThrows(ConflictException.class, () -> {
-            medicalrecordService.Create(duplicate);
+            medicalrecordService.create(duplicate);
         });
 
         assertEquals(2, mockMedicalRecords.size());

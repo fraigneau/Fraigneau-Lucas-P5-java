@@ -48,7 +48,7 @@ public class RestPersonTest {
     @Test
     void testCreate() throws Exception {
         Person person = new Person();
-        when(personService.Create(any(Person.class))).thenReturn(person);
+        when(personService.create(any(Person.class))).thenReturn(person);
 
         String postBody = "{\"firstName\":\"test\", \"lastName\":\"test\", \"address\":\"test\", \"city\":\"test\", \"zip\":\"test\", \"phone\":\"test\", \"email\":\"test@email.com\"}";
 

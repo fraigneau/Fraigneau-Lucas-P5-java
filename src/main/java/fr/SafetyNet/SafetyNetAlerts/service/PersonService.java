@@ -54,7 +54,7 @@ public class PersonService implements GenericService<Person> {
     }
 
     @Override
-    public Person Create(Person newPerson) {
+    public Person create(Person newPerson) {
 
         for (Person person : persons) {
             if (person.getFirstName().equals(newPerson.getFirstName()) && person.getLastName().equals(

@@ -14,8 +14,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.service.PersonService;
 
 @RestController
-public class RestPerson { // ! TODO test unitaire tester que les endpoint sont bien appelés
-                          // ! TODO tester les code HTTP
+public class RestPerson {
 
     private final PersonService personService;
 
@@ -33,9 +32,9 @@ public class RestPerson { // ! TODO test unitaire tester que les endpoint sont b
         return personService.readById(firstName, lastName);
     }
 
-    @PostMapping("/person") // ! TODO return person au lieux des Strings !
+    @PostMapping("/person")
     public Person create(@RequestBody Person person) {
-        personService.Create(person);
+        personService.create(person);
         return person;
     }
 

@@ -82,7 +82,7 @@ class FirestationServiceTest {
         newFireStation.setAddress("789 Pine Ln");
         newFireStation.setStation("3");
 
-        FireStation created = firestationService.Create(newFireStation);
+        FireStation created = firestationService.create(newFireStation);
 
         assertNotNull(created);
         assertEquals("789 Pine Ln", created.getAddress());
@@ -98,7 +98,7 @@ class FirestationServiceTest {
         duplicate.setStation("4");
 
         assertThrows(ConflictException.class, () -> {
-            firestationService.Create(duplicate);
+            firestationService.create(duplicate);
         });
 
         assertEquals(2, mockFireStations.size());

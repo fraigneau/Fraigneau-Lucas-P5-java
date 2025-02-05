@@ -52,7 +52,7 @@ public class MedicalrecordService implements GenericService<MedicalRecord> {
     }
 
     @Override
-    public MedicalRecord Create(MedicalRecord newMedicalRecord) {
+    public MedicalRecord create(MedicalRecord newMedicalRecord) {
 
         for (MedicalRecord medicalRecord : medicalRecords) {
             if (medicalRecord.getFirstName().equals(newMedicalRecord.getFirstName())

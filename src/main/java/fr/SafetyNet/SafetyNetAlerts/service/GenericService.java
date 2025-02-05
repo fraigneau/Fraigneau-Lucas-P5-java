@@ -8,7 +8,7 @@ public interface GenericService<T> {
 
     public T readById(String... args);
 
-    public T Create(T newObject);
+    public T create(T newObject);
 
     public void deleteById(String... args);
 
