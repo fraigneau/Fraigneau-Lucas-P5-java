@@ -3,17 +3,13 @@ package fr.SafetyNet.SafetyNetAlerts.dto.search;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PhoneAlert {
+@Data
+public class RPhoneAlert {
 
     private List<String> phones;
 

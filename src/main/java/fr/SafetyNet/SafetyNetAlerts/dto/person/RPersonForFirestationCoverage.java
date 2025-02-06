@@ -2,12 +2,10 @@ package fr.SafetyNet.SafetyNetAlerts.dto.person;
 
 import lombok.*;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PersonForFirestationCoverage {
+@Data
+public class RPersonForFirestationCoverage {
     private String firstName;
     private String lastName;
     private String address;

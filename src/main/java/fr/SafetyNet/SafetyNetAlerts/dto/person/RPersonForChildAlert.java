@@ -4,17 +4,13 @@ import java.util.List;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PersonForChildAlert {
+@Data
+public class RPersonForChildAlert {
 
     private String firstName;
     private String lastName;

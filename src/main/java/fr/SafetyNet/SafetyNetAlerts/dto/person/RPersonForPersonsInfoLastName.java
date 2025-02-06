@@ -4,12 +4,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PersonForPersonsInfoLastName {
+@Data
+public class RPersonForPersonsInfoLastName {
 
     private String lastName;
     private String address;

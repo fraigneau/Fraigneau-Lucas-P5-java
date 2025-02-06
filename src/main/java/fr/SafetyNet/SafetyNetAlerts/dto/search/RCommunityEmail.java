@@ -4,12 +4,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class CommunityEmail {
+@Data
+public class RCommunityEmail {
 
     private List<String> emails;
 

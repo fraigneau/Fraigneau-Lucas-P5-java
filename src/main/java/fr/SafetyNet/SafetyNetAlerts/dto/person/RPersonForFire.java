@@ -4,12 +4,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PersonForFire {
+@Data
+public class RPersonForFire {
 
     private String lastName;
     private String phone;

@@ -2,22 +2,18 @@ package fr.SafetyNet.SafetyNetAlerts.dto.search;
 
 import java.util.List;
 
-import fr.SafetyNet.SafetyNetAlerts.dto.person.PersonForFire;
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFire;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class Fire {
+@Data
+public class RFire {
 
     private List<Integer> stations;
 
-    private List<PersonForFire> persons;
+    private List<RPersonForFire> persons;
 
 }
