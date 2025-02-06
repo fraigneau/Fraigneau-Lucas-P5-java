@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Generated
-public class FireStation {
+public class Firestation {
 
     private String address;
-    private String station;
+    private int station;
 
-    public FireStation() {
+    public Firestation() {
     }
 }
