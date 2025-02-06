@@ -67,10 +67,8 @@ class PersonServiceTest {
 
     @Test
     void testReadAll() throws IOException {
-        // When
         List<Person> persons = personService.readAll();
 
-        // Then
         assertEquals(2, persons.size());
         verify(jsonDataRepo, Mockito.times(2)).getList(Person.class);
     }
