@@ -3,9 +3,9 @@ package fr.SafetyNet.SafetyNetAlerts.mapper;
 import org.mapstruct.Mapper;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
-@NotTested
+@Generated
 @Mapper(componentModel = "spring")
 public interface MedicalrecordMapper {
 

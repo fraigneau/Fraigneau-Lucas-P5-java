@@ -4,9 +4,9 @@ import org.mapstruct.Mapper;
 
 import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFirestationCoverage;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
-@NotTested
+@Generated
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 

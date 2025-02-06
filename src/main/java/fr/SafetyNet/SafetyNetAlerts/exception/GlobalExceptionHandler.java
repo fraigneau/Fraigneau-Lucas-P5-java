@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import fr.SafetyNet.SafetyNetAlerts.dto.ErrorResponse;
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
 @RestControllerAdvice
-@NotTested
+@Generated
 public class GlobalExceptionHandler {
 
         @ExceptionHandler(ResourceNotFoundException.class)

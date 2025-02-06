@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
-@NotTested
+@Generated
 @SpringBootApplication
 public class SafetyNetAlertsApplication {
 

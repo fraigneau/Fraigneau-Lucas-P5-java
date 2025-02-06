@@ -2,7 +2,7 @@ package fr.SafetyNet.SafetyNetAlerts.dto;
 
 import java.time.LocalDateTime;
 
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-@NotTested
+@Generated
 public class ErrorResponse {
 
     private LocalDateTime timestamp;

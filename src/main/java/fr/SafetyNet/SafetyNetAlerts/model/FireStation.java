@@ -1,10 +1,10 @@
 package fr.SafetyNet.SafetyNetAlerts.model;
 
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 import lombok.Data;
 
 @Data
-@NotTested
+@Generated
 public class Firestation {
 
     private String address;

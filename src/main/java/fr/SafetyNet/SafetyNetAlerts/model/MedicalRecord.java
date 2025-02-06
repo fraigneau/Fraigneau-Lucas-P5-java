@@ -2,11 +2,11 @@ package fr.SafetyNet.SafetyNetAlerts.model;
 
 import java.util.List;
 
-import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
+import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 import lombok.Data;
 
 @Data
-@NotTested
+@Generated
 public class Medicalrecord {
 
     private String firstName;
