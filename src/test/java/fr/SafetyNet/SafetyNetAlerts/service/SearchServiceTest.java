@@ -114,49 +114,40 @@ public class SearchServiceTest {
 
     @Test
     public void testGetCoveredPersonsByStation_ReturnsCorrectCoverage() {
-        logger.info("Starting testGetCoveredPersonsByStation_ReturnsCorrectCoverage");
         RFirestationCoverage result = searchService.getCoveredPersonsByStation(1);
         assertEquals(1, result.getAdultCount().get(), "The number of adults should be 1");
         assertEquals(1, result.getChildCount().get(), "The number of children should be 1");
         assertEquals(2, result.getPersons().size(), "There should be 2 covered persons");
-        logger.info("Finished testGetCoveredPersonsByStation_ReturnsCorrectCoverage");
     }
 
     @Test
     public void testGetCoveredPersonsByStation_FirestationNotFound_ThrowsException() {
-        logger.info("Starting testGetCoveredPersonsByStation_FirestationNotFound_ThrowsException");
         when(firestationService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getCoveredPersonsByStation(99));
         assertEquals("No firestations found for station number: 99", exception.getMessage());
-        logger.info("Finished testGetCoveredPersonsByStation_FirestationNotFound_ThrowsException");
     }
 
     @Test
     public void testGetChildrenByAddress_NoResidents_ReturnsEmptyChildAlert() {
-        logger.info("Starting testGetChildrenByAddress_NoResidents_ReturnsEmptyChildAlert");
         when(personService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         RChildAlert result = searchService.getChildrenByAddress("Unknown Address");
         assertEquals(0, result.getChildren().size(), "The children list should be empty");
-        logger.info("Finished testGetChildrenByAddress_NoResidents_ReturnsEmptyChildAlert");
     }
 
     @Test
     public void testGetChildrenByAddress_WithChildren_ReturnsCorrectChildAlert() {
-        logger.info("Starting testGetChildrenByAddress_WithChildren_ReturnsCorrectChildAlert");
         RChildAlert result = searchService.getChildrenByAddress("123 Main St");
         assertEquals(1, result.getChildren().size(), "There should be 1 child");
         RPersonForChildAlert childAlert = result.getChildren().get(0);
         assertEquals("Jane", childAlert.getFirstName(), "First name should be Jane");
         assertEquals("Doe", childAlert.getLastName(), "Last name should be Doe");
-        logger.info("Finished testGetChildrenByAddress_WithChildren_ReturnsCorrectChildAlert");
     }
 
     @Test
     public void testGetPhonesByStation_ReturnsCorrectPhones() {
-        logger.info("Starting testGetPhonesByStation_ReturnsCorrectPhones");
         RPhoneAlert result = searchService.getPhonesByStation(1);
         assertEquals(2, result.getPhones().size(), "There should be 2 phone numbers");
         List<String> phones = result.getPhones();
@@ -164,23 +155,19 @@ public class SearchServiceTest {
         boolean containsPhone2 = phones.contains("222-222-2222");
         assertEquals(true, containsPhone1, "Phone number 111-111-1111 should be present");
         assertEquals(true, containsPhone2, "Phone number 222-222-2222 should be present");
-        logger.info("Finished testGetPhonesByStation_ReturnsCorrectPhones");
     }
 
     @Test
     public void testGetPhonesByStation_FirestationNotFound_ThrowsException() {
-        logger.info("Starting testGetPhonesByStation_FirestationNotFound_ThrowsException");
         when(firestationService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getPhonesByStation(99));
         assertEquals("No firestations found for station number: 99", exception.getMessage());
-        logger.info("Finished testGetPhonesByStation_FirestationNotFound_ThrowsException");
     }
 
     @Test
     public void testGetPersonsByAddressStation_ReturnsCorrectFireData() {
-        logger.info("Starting testGetPersonsByAddressStation_ReturnsCorrectFireData");
         RFire result = searchService.getPersonsByAddressStation("123 Main St");
         assertEquals(1, result.getStations().size(), "There should be 1 station associated with the address");
         assertEquals(2, result.getPersons().size(), "There should be 2 residents");
@@ -190,85 +177,68 @@ public class SearchServiceTest {
         int expectedAgeChild = LocalDate.now().getYear() - 2010;
         boolean validAge = (age == expectedAgeAdult) || (age == expectedAgeChild);
         assertEquals(true, validAge, "The age should match the birth year");
-        logger.info("Finished testGetPersonsByAddressStation_ReturnsCorrectFireData");
     }
 
     @Test
     public void testGetPersonsByAddressStation_NoFirestation_ThrowsException() {
-        logger.info("Starting testGetPersonsByAddressStation_NoFirestation_ThrowsException");
         when(firestationService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getPersonsByAddressStation("123 Main St"));
         assertEquals("No firestation found for address: 123 Main St", exception.getMessage());
-        logger.info("Finished testGetPersonsByAddressStation_NoFirestation_ThrowsException");
     }
 
     @Test
     public void testGetPersonsByAddressStation_NoResidents_ThrowsException() {
-        logger.info("Starting testGetPersonsByAddressStation_NoResidents_ThrowsException");
         when(personService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getPersonsByAddressStation("123 Main St"));
         assertEquals("No residents found for the address: 123 Main St", exception.getMessage());
-        logger.info("Finished testGetPersonsByAddressStation_NoResidents_ThrowsException");
     }
 
     @Test
     public void testGetPersonsByStationsWithMedicalRecord_ReturnsCorrectFloodData() {
-        logger.info("Starting testGetPersonsByStationsWithMedicalRecord_ReturnsCorrectFloodData");
         RFloodStations result = searchService.getPersonsByStationsWithMedicalRecord(List.of(1));
         assertEquals(2, result.getPersons().size(), "There should be 2 persons in the flood zone");
         RPersonForFloodStations floodResident = result.getPersons().get(0);
         assertEquals("123 Main St", floodResident.getAddress(), "The address should be 123 Main St");
-        logger.info("Finished testGetPersonsByStationsWithMedicalRecord_ReturnsCorrectFloodData");
     }
 
     @Test
     public void testGetPersonsByStationsWithMedicalRecord_NoFirestationFound_ThrowsException() {
-        logger.info("Starting testGetPersonsByStationsWithMedicalRecord_NoFirestationFound_ThrowsException");
         when(firestationService.readAll()).thenReturn(List.of());
         searchService = new SearchService(personMapper, firestationService, medicalrecordService, personService);
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getPersonsByStationsWithMedicalRecord(List.of(99)));
         assertEquals("Resource not found for station numbers: [99]", exception.getMessage());
-        logger.info("Finished testGetPersonsByStationsWithMedicalRecord_NoFirestationFound_ThrowsException");
     }
 
     @Test
     public void testGetPersonByLastNameWithMedicalRecord_ReturnsCorrectData() {
-        logger.info("Starting testGetPersonByLastNameWithMedicalRecord_ReturnsCorrectData");
         RPersonsInfoLastName result = searchService.getPersonByLastNameWithMedicalRecord("Doe");
         assertEquals(2, result.getPersons().size(), "There should be 2 persons with the last name Doe");
-        logger.info("Finished testGetPersonByLastNameWithMedicalRecord_ReturnsCorrectData");
     }
 
     @Test
     public void testGetPersonByLastNameWithMedicalRecord_NotFound_ThrowsException() {
-        logger.info("Starting testGetPersonByLastNameWithMedicalRecord_NotFound_ThrowsException");
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getPersonByLastNameWithMedicalRecord("Unknown"));
         assertEquals("Resource not found for the lastName: Unknown", exception.getMessage());
-        logger.info("Finished testGetPersonByLastNameWithMedicalRecord_NotFound_ThrowsException");
     }
 
     @Test
     public void testGetEmailsByCity_ReturnsCorrectEmails() {
-        logger.info("Starting testGetEmailsByCity_ReturnsCorrectEmails");
         RCommunityEmail result = searchService.getEmailsByCity("City");
         assertEquals(2, result.getEmails().size(), "There should be 2 emails for the city 'City'");
         boolean containsEmail = result.getEmails().contains("john.doe@example.com");
         assertEquals(true, containsEmail, "The email john.doe@example.com should be present");
-        logger.info("Finished testGetEmailsByCity_ReturnsCorrectEmails");
     }
 
     @Test
     public void testGetEmailsByCity_NotFound_ThrowsException() {
-        logger.info("Starting testGetEmailsByCity_NotFound_ThrowsException");
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> searchService.getEmailsByCity("UnknownCity"));
         assertEquals("Resource not found for the city: UnknownCity", exception.getMessage());
-        logger.info("Finished testGetEmailsByCity_NotFound_ThrowsException");
     }
 }
