@@ -69,21 +69,6 @@
 			<version>1.18.36</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- MapStruct : pour le mapping des DTO -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>1.5.4.Final</version>
-		</dependency>
-
-		<!-- MapStruct Processor : pour la génération du code de mapping -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
-			<version>1.5.4.Final</version>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 
 	<!-- Configuration de la build -->
@@ -121,12 +106,6 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 							<version>1.18.36</version>
-						</path>
-						<!-- Ajout du processeur MapStruct -->
-						<path>
-							<groupId>org.mapstruct</groupId>
-							<artifactId>mapstruct-processor</artifactId>
-							<version>1.5.4.Final</version>
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>

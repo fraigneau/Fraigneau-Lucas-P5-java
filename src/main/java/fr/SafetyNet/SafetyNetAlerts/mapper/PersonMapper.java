@@ -1,13 +1,10 @@
 package fr.SafetyNet.SafetyNetAlerts.mapper;
 
-import org.mapstruct.Mapper;
-
 import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFirestationCoverage;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import fr.SafetyNet.SafetyNetAlerts.util.Generated;
 
 @Generated
-@Mapper(componentModel = "spring")
 public interface PersonMapper {
 
     Person toCreateDTO(Person person);

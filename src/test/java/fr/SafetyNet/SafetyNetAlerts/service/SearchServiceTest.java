@@ -39,8 +39,6 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class SearchServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(SearchServiceTest.class);
-
     @Mock
     private PersonMapper personMapper;
 
