@@ -28,6 +28,8 @@ public class RestPersonTest {
 
     private MockMvc mockMvc;
 
+    // Endpoint et identifiants pour les tests (ici, nous utilisons firstName et
+    // lastName)
     private static final String endPoint = "/person";
     private static final String Id = "/test.test";
     private static final String firstName = "test";
@@ -50,7 +52,9 @@ public class RestPersonTest {
         Person person = new Person();
         when(personService.create(any(Person.class))).thenReturn(person);
 
-        String postBody = "{\"firstName\":\"test\", \"lastName\":\"test\", \"address\":\"test\", \"city\":\"test\", \"zip\":\"test\", \"phone\":\"test\", \"email\":\"test@email.com\"}";
+        // Notez que le champ zip est désormais un nombre (long) et non une chaîne de
+        // caractères.
+        String postBody = "{\"firstName\":\"test\", \"lastName\":\"test\", \"address\":\"test\", \"city\":\"test\", \"zip\":12345, \"phone\":\"test\", \"email\":\"test@email.com\"}";
 
         mockMvc.perform(post(endPoint)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,10 +75,10 @@ public class RestPersonTest {
         Person updatedPerson = new Person();
         when(personService.update(any(Person.class), eq(firstName), eq(lastName))).thenReturn(updatedPerson);
 
-        String updateBody = "{\"firstName\":\"test2\", \"lastName\":\"test2\", \"address\":\"test 2\", \"city\":\"test 2\", \"zip\":\"test 2\", \"phone\":\"test 2\", \"email\":\"test2@email.com\"}";
+        // Ici aussi, le champ zip doit être un nombre
+        String updateBody = "{\"firstName\":\"test2\", \"lastName\":\"test2\", \"address\":\"test 2\", \"city\":\"test 2\", \"zip\":67890, \"phone\":\"test 2\", \"email\":\"test2@email.com\"}";
 
-        mockMvc.perform(put(
-                endPoint + Id)
+        mockMvc.perform(put(endPoint + Id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateBody))
                 .andExpect(status().isOk());

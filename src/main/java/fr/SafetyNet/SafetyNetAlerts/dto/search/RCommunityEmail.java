@@ -1,8 +1,10 @@
 package fr.SafetyNet.SafetyNetAlerts.dto.search;
 
-import lombok.*;
-
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor

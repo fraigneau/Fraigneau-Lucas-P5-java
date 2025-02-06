@@ -3,7 +3,9 @@ package fr.SafetyNet.SafetyNetAlerts.mapper;
 import org.mapstruct.Mapper;
 
 import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
 
+@NotTested
 @Mapper(componentModel = "spring")
 public interface FirestationMapper {
 

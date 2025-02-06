@@ -1,8 +1,8 @@
 package fr.SafetyNet.SafetyNetAlerts.exception;
 
-import fr.SafetyNet.SafetyNetAlerts.util.Generated;
+import fr.SafetyNet.SafetyNetAlerts.util.NotTested;
 
-@Generated
+@NotTested
 public class ResourceNotFoundException extends RuntimeException {
 
     public ResourceNotFoundException(String message) {

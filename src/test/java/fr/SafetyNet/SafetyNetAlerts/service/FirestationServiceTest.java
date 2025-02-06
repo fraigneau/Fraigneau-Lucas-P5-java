@@ -131,8 +131,8 @@ class FirestationServiceTest {
         Firestation result = firestationService.update(updated, "123 Main St");
 
         assertNotNull(result);
-        assertEquals("5", result.getStation());
-        assertEquals("5", mockFireStations.get(0).getStation());
+        assertEquals(5, result.getStation());
+        assertEquals(5, mockFireStations.get(0).getStation());
     }
 
     @Test
