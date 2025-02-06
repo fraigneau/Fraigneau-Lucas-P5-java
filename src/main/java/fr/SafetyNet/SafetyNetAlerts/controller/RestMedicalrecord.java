@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.service.MedicalrecordService;
 
 @RestController
@@ -23,17 +23,17 @@ public class RestMedicalrecord {
     }
 
     @GetMapping("/medicalrecord")
-    public List<MedicalRecord> readAll() {
+    public List<Medicalrecord> readAll() {
         return medicalrecordService.readAll();
     }
 
     @GetMapping("medicalrecord/{firstName}.{lastName}")
-    public MedicalRecord readById(@PathVariable String firstName, @PathVariable String lastName) {
+    public Medicalrecord readById(@PathVariable String firstName, @PathVariable String lastName) {
         return medicalrecordService.readById(firstName, lastName);
     }
 
     @PostMapping("/medicalrecord")
-    public String create(@RequestBody MedicalRecord medicalRecord) {
+    public String create(@RequestBody Medicalrecord medicalRecord) {
         medicalrecordService.create(medicalRecord);
         return "Medicalrecord created " + medicalRecord.getFirstName() + " " + medicalRecord.getLastName();
     }
@@ -45,7 +45,7 @@ public class RestMedicalrecord {
     }
 
     @PutMapping("/medicalrecord/{firstName}.{lastName}")
-    public String update(@RequestBody MedicalRecord updatedRecord,
+    public String update(@RequestBody Medicalrecord updatedRecord,
             @PathVariable String firstName, @PathVariable String lastName) {
         medicalrecordService.update(updatedRecord, firstName, lastName);
         return "Medicalrecord updated " + updatedRecord.getFirstName() + " " + updatedRecord.getLastName();

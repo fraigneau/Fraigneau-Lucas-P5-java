@@ -17,12 +17,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
-import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import jakarta.annotation.PostConstruct;
+import lombok.Data;
 
 @Repository
+@Data
 public class JsonDataRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonDataRepository.class);
@@ -33,8 +35,8 @@ public class JsonDataRepository {
 
     static {
         CLASS_TO_JSON_FIELD.put(Person.class, "persons");
-        CLASS_TO_JSON_FIELD.put(FireStation.class, "firestations");
-        CLASS_TO_JSON_FIELD.put(MedicalRecord.class, "medicalrecords");
+        CLASS_TO_JSON_FIELD.put(Firestation.class, "firestations");
+        CLASS_TO_JSON_FIELD.put(Medicalrecord.class, "medicalrecords");
     }
 
     @PostConstruct
