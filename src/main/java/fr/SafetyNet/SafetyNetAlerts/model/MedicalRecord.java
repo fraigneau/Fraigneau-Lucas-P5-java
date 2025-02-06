@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Generated
-public class MedicalRecord {
+public class Medicalrecord {
 
     private String firstName;
     private String lastName;
@@ -15,6 +15,6 @@ public class MedicalRecord {
     private List<String> medications;
     private List<String> allergies;
 
-    public MedicalRecord() {
+    public Medicalrecord() {
     }
 }
