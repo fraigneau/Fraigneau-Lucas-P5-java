@@ -21,7 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.service.MedicalrecordService;
 
 public class RestMedicalrecordTest {
@@ -47,8 +47,8 @@ public class RestMedicalrecordTest {
 
     @Test
     void testCreate() throws Exception {
-        MedicalRecord medicalRecord = new MedicalRecord();
-        when(medicalrecordService.create(any(MedicalRecord.class))).thenReturn(medicalRecord);
+        Medicalrecord medicalRecord = new Medicalrecord();
+        when(medicalrecordService.create(any(Medicalrecord.class))).thenReturn(medicalRecord);
 
         String postBody = "{\"firstName\":\"test\", \"lastName\":\"test\", \"birthdate\":\"01/01/2000\", \"medications\":[\"med1:500mg\"], \"allergies\":[\"peanut\"]}";
 
@@ -60,7 +60,7 @@ public class RestMedicalrecordTest {
 
     @Test
     void testReadById() throws Exception {
-        when(medicalrecordService.readById(firstName, lastName)).thenReturn(new MedicalRecord());
+        when(medicalrecordService.readById(firstName, lastName)).thenReturn(new Medicalrecord());
 
         mockMvc.perform(get(endPoint + Id))
                 .andExpect(status().isOk());
@@ -68,8 +68,8 @@ public class RestMedicalrecordTest {
 
     @Test
     void testUpdate() throws Exception {
-        MedicalRecord updatedRecord = new MedicalRecord();
-        when(medicalrecordService.update(any(MedicalRecord.class), eq(firstName), eq(lastName)))
+        Medicalrecord updatedRecord = new Medicalrecord();
+        when(medicalrecordService.update(any(Medicalrecord.class), eq(firstName), eq(lastName)))
                 .thenReturn(updatedRecord);
 
         String updateBody = "{\"firstName\":\"test2\", \"lastName\":\"test2\", \"birthdate\":\"02/02/2000\", \"medications\":[\"med2:250mg\"], \"allergies\":[\"gluten\"]}";

@@ -21,7 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
 import fr.SafetyNet.SafetyNetAlerts.service.FirestationService;
 
 public class RestFirestationTest {
@@ -46,8 +46,8 @@ public class RestFirestationTest {
 
     @Test
     void testCreate() throws Exception {
-        FireStation fireStation = new FireStation();
-        when(firestationService.create(any(FireStation.class))).thenReturn(fireStation);
+        Firestation fireStation = new Firestation();
+        when(firestationService.create(any(Firestation.class))).thenReturn(fireStation);
 
         String postBody = "{\"address\":\"testAddress\", \"station\":\"1\"}";
 
@@ -59,7 +59,7 @@ public class RestFirestationTest {
 
     @Test
     void testReadById() throws Exception {
-        when(firestationService.readById(address)).thenReturn(new FireStation());
+        when(firestationService.readById(address)).thenReturn(new Firestation());
 
         mockMvc.perform(get(endPoint + Id))
                 .andExpect(status().isOk());
@@ -67,8 +67,8 @@ public class RestFirestationTest {
 
     @Test
     void testUpdate() throws Exception {
-        FireStation updatedFireStation = new FireStation();
-        when(firestationService.update(any(FireStation.class), eq(address))).thenReturn(updatedFireStation);
+        Firestation updatedFireStation = new Firestation();
+        when(firestationService.update(any(Firestation.class), eq(address))).thenReturn(updatedFireStation);
 
         String updateBody = "{\"address\":\"testAddress2\", \"station\":\"2\"}";
 

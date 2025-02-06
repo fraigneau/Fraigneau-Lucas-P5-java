@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
 import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
-import fr.SafetyNet.SafetyNetAlerts.model.MedicalRecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,19 +34,19 @@ class MedicalrecordServiceTest {
     @InjectMocks
     private MedicalrecordService medicalrecordService;
 
-    private List<MedicalRecord> mockMedicalRecords;
+    private List<Medicalrecord> mockMedicalRecords;
 
     @BeforeEach
     void setUp() throws IOException {
         mockMedicalRecords = new ArrayList<>();
-        MedicalRecord m1 = new MedicalRecord();
+        Medicalrecord m1 = new Medicalrecord();
         m1.setFirstName("John");
         m1.setLastName("Doe");
         m1.setBirthdate("01/01/1990");
         m1.setMedications(List.of("med1", "med2"));
         m1.setAllergies(List.of("allergy1"));
 
-        MedicalRecord m2 = new MedicalRecord();
+        Medicalrecord m2 = new Medicalrecord();
         m2.setFirstName("Jane");
         m2.setLastName("Doe");
         m2.setBirthdate("02/02/1992");
@@ -56,21 +56,21 @@ class MedicalrecordServiceTest {
         mockMedicalRecords.add(m1);
         mockMedicalRecords.add(m2);
 
-        when(jsonDataRepo.getList(MedicalRecord.class)).thenReturn(mockMedicalRecords);
+        when(jsonDataRepo.getList(Medicalrecord.class)).thenReturn(mockMedicalRecords);
 
         medicalrecordService = new MedicalrecordService(jsonDataRepo);
     }
 
     @Test
     void testReadAll() throws IOException {
-        List<MedicalRecord> records = medicalrecordService.readAll();
+        List<Medicalrecord> records = medicalrecordService.readAll();
         assertEquals(2, records.size());
-        verify(jsonDataRepo, Mockito.times(2)).getList(MedicalRecord.class);
+        verify(jsonDataRepo, Mockito.times(2)).getList(Medicalrecord.class);
     }
 
     @Test
     void testReadById_Found() {
-        MedicalRecord foundRecord = medicalrecordService.readById("John", "Doe");
+        Medicalrecord foundRecord = medicalrecordService.readById("John", "Doe");
         assertNotNull(foundRecord);
         assertEquals("John", foundRecord.getFirstName());
         assertEquals("Doe", foundRecord.getLastName());
@@ -85,24 +85,24 @@ class MedicalrecordServiceTest {
 
     @Test
     void testCreate_Success() throws IOException {
-        MedicalRecord newRecord = new MedicalRecord();
+        Medicalrecord newRecord = new Medicalrecord();
         newRecord.setFirstName("Bob");
         newRecord.setLastName("Martin");
         newRecord.setBirthdate("03/03/1993");
         newRecord.setMedications(List.of("med4"));
         newRecord.setAllergies(List.of("allergy4"));
 
-        MedicalRecord created = medicalrecordService.create(newRecord);
+        Medicalrecord created = medicalrecordService.create(newRecord);
 
         assertNotNull(created);
         assertEquals("Bob", created.getFirstName());
         assertEquals(3, mockMedicalRecords.size());
-        verify(jsonDataRepo, Mockito.times(1)).setList(MedicalRecord.class, mockMedicalRecords);
+        verify(jsonDataRepo, Mockito.times(1)).setList(Medicalrecord.class, mockMedicalRecords);
     }
 
     @Test
     void testCreate_Conflict() throws IOException {
-        MedicalRecord duplicate = new MedicalRecord();
+        Medicalrecord duplicate = new Medicalrecord();
         duplicate.setFirstName("John");
         duplicate.setLastName("Doe");
         duplicate.setBirthdate("04/04/1994");
@@ -121,7 +121,7 @@ class MedicalrecordServiceTest {
     void testDeleteById_Success() throws IOException {
         medicalrecordService.deleteById("Jane", "Doe");
         assertEquals(1, mockMedicalRecords.size());
-        verify(jsonDataRepo, Mockito.times(1)).setList(MedicalRecord.class, mockMedicalRecords);
+        verify(jsonDataRepo, Mockito.times(1)).setList(Medicalrecord.class, mockMedicalRecords);
     }
 
     @Test
@@ -135,14 +135,14 @@ class MedicalrecordServiceTest {
 
     @Test
     void testUpdate_Success() {
-        MedicalRecord updated = new MedicalRecord();
+        Medicalrecord updated = new Medicalrecord();
         updated.setFirstName("John");
         updated.setLastName("Doe");
         updated.setBirthdate("05/05/1995");
         updated.setMedications(List.of("med6"));
         updated.setAllergies(List.of("allergy6"));
 
-        MedicalRecord result = medicalrecordService.update(updated, "John", "Doe");
+        Medicalrecord result = medicalrecordService.update(updated, "John", "Doe");
 
         assertNotNull(result);
         assertEquals("med6", result.getMedications().get(0));
@@ -151,7 +151,7 @@ class MedicalrecordServiceTest {
 
     @Test
     void testUpdate_NotFound() {
-        MedicalRecord updated = new MedicalRecord();
+        Medicalrecord updated = new Medicalrecord();
         updated.setFirstName("Ghost");
         updated.setLastName("Person");
 

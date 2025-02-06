@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
 import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
-import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,37 +34,37 @@ class FirestationServiceTest {
     @InjectMocks
     private FirestationService firestationService;
 
-    private List<FireStation> mockFireStations;
+    private List<Firestation> mockFireStations;
 
     @BeforeEach
     void setUp() throws IOException {
         mockFireStations = new ArrayList<>();
-        FireStation f1 = new FireStation();
+        Firestation f1 = new Firestation();
         f1.setAddress("123 Main St");
-        f1.setStation("1");
+        f1.setStation(1);
 
-        FireStation f2 = new FireStation();
+        Firestation f2 = new Firestation();
         f2.setAddress("456 Oak Ave");
-        f2.setStation("2");
+        f2.setStation(2);
 
         mockFireStations.add(f1);
         mockFireStations.add(f2);
 
-        when(jsonDataRepo.getList(FireStation.class)).thenReturn(mockFireStations);
+        when(jsonDataRepo.getList(Firestation.class)).thenReturn(mockFireStations);
 
         firestationService = new FirestationService(jsonDataRepo);
     }
 
     @Test
     void testReadAll() throws IOException {
-        List<FireStation> fireStations = firestationService.readAll();
+        List<Firestation> fireStations = firestationService.readAll();
         assertEquals(2, fireStations.size());
-        verify(jsonDataRepo, times(2)).getList(FireStation.class);
+        verify(jsonDataRepo, times(2)).getList(Firestation.class);
     }
 
     @Test
     void testReadById_Found() {
-        FireStation found = firestationService.readById("123 Main St");
+        Firestation found = firestationService.readById("123 Main St");
         assertNotNull(found);
         assertEquals("123 Main St", found.getAddress());
     }
@@ -78,24 +78,24 @@ class FirestationServiceTest {
 
     @Test
     void testCreate_Success() throws IOException {
-        FireStation newFireStation = new FireStation();
+        Firestation newFireStation = new Firestation();
         newFireStation.setAddress("789 Pine Ln");
-        newFireStation.setStation("3");
+        newFireStation.setStation(3);
 
-        FireStation created = firestationService.create(newFireStation);
+        Firestation created = firestationService.create(newFireStation);
 
         assertNotNull(created);
         assertEquals("789 Pine Ln", created.getAddress());
         assertEquals(3, mockFireStations.size());
 
-        verify(jsonDataRepo, times(1)).setList(FireStation.class, mockFireStations);
+        verify(jsonDataRepo, times(1)).setList(Firestation.class, mockFireStations);
     }
 
     @Test
     void testCreate_Conflict() throws IOException {
-        FireStation duplicate = new FireStation();
+        Firestation duplicate = new Firestation();
         duplicate.setAddress("123 Main St");
-        duplicate.setStation("4");
+        duplicate.setStation(4);
 
         assertThrows(ConflictException.class, () -> {
             firestationService.create(duplicate);
@@ -109,7 +109,7 @@ class FirestationServiceTest {
     void testDeleteById_Success() throws IOException {
         firestationService.deleteById("456 Oak Ave");
         assertEquals(1, mockFireStations.size());
-        verify(jsonDataRepo, times(1)).setList(FireStation.class, mockFireStations);
+        verify(jsonDataRepo, times(1)).setList(Firestation.class, mockFireStations);
     }
 
     @Test
@@ -124,11 +124,11 @@ class FirestationServiceTest {
 
     @Test
     void testUpdate_Success() {
-        FireStation updated = new FireStation();
+        Firestation updated = new Firestation();
         updated.setAddress("123 Main St");
-        updated.setStation("5");
+        updated.setStation(5);
 
-        FireStation result = firestationService.update(updated, "123 Main St");
+        Firestation result = firestationService.update(updated, "123 Main St");
 
         assertNotNull(result);
         assertEquals("5", result.getStation());
@@ -137,9 +137,9 @@ class FirestationServiceTest {
 
     @Test
     void testUpdate_NotFound() {
-        FireStation updated = new FireStation();
+        Firestation updated = new Firestation();
         updated.setAddress("999 Unknown Rd");
-        updated.setStation("6");
+        updated.setStation(6);
 
         assertThrows(ResourceNotFoundException.class, () -> {
             firestationService.update(updated, "999 Unknown Rd");

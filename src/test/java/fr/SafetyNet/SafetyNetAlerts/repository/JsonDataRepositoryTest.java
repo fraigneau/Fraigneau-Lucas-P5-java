@@ -69,7 +69,7 @@ class JsonDataRepositoryTest {
         newPerson.setLastName("Doe");
         newPerson.setAddress("123 Fake St");
         newPerson.setCity("Springfield");
-        newPerson.setZip("12345");
+        newPerson.setZip(12345);
         newPerson.setPhone("123-456-7890");
         newPerson.setEmail("JaketheDog@test.com");
 

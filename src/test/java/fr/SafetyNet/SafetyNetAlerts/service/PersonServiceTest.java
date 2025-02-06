@@ -44,7 +44,7 @@ class PersonServiceTest {
         p1.setLastName("Doe");
         p1.setAddress("Address1");
         p1.setCity("City1");
-        p1.setZip("Zip1");
+        p1.setZip(1);
         p1.setPhone("Phone1");
         p1.setEmail("Email1");
 
@@ -53,7 +53,7 @@ class PersonServiceTest {
         p2.setLastName("Doe");
         p2.setAddress("Address2");
         p2.setCity("City2");
-        p2.setZip("Zip2");
+        p2.setZip(2);
         p2.setPhone("Phone2");
         p2.setEmail("Email2");
 
@@ -98,7 +98,7 @@ class PersonServiceTest {
         newPerson.setLastName("Martin");
         newPerson.setAddress("Address3");
         newPerson.setCity("City3");
-        newPerson.setZip("Zip3");
+        newPerson.setZip(3);
         newPerson.setPhone("Phone3");
         newPerson.setEmail("Email3");
 
@@ -118,7 +118,7 @@ class PersonServiceTest {
         duplicate.setLastName("Doe");
         duplicate.setAddress("NewAddress");
         duplicate.setCity("NewCity");
-        duplicate.setZip("NewZip");
+        duplicate.setZip(123);
         duplicate.setPhone("NewPhone");
         duplicate.setEmail("NewEmail");
 
@@ -156,7 +156,7 @@ class PersonServiceTest {
         updated.setLastName("Doe");
         updated.setAddress("UpdatedAddress");
         updated.setCity("UpdatedCity");
-        updated.setZip("UpdatedZip");
+        updated.setZip(123);
         updated.setPhone("UpdatedPhone");
         updated.setEmail("UpdatedEmail");
 
