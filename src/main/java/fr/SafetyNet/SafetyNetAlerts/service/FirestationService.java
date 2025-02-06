@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
 import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
-import fr.SafetyNet.SafetyNetAlerts.model.FireStation;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
 @Service
-public class FirestationService implements GenericService<FireStation> {
+public class FirestationService implements GenericService<Firestation> {
 
-    private List<FireStation> fireStations;
+    private List<Firestation> fireStations;
     private JsonDataRepository jsonWrapper;
     private static final Logger logger = LoggerFactory.getLogger(FirestationService.class);
 
@@ -26,22 +26,22 @@ public class FirestationService implements GenericService<FireStation> {
     @Autowired
     public FirestationService(JsonDataRepository jsonWrapper) throws IOException {
         this.jsonWrapper = jsonWrapper;
-        this.fireStations = jsonWrapper.getList(FireStation.class);
+        this.fireStations = jsonWrapper.getList(Firestation.class);
     }
 
     @Override
-    public List<FireStation> readAll() {
+    public List<Firestation> readAll() {
         return fireStations;
     }
 
     @Override
-    public FireStation readById(String... args) {
+    public Firestation readById(String... args) {
         if (args.length != 1) {
             logger.error("Expected 1 arguments, got {}", args.length);
             throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
         }
 
-        for (FireStation fireStation : fireStations) {
+        for (Firestation fireStation : fireStations) {
             if (fireStation.getAddress().equals(args[0])) {
                 logger.info("FireStation found");
                 return fireStation;
@@ -52,9 +52,9 @@ public class FirestationService implements GenericService<FireStation> {
     }
 
     @Override
-    public FireStation create(FireStation newFireStation) {
+    public Firestation create(Firestation newFireStation) {
 
-        for (FireStation fireStation : fireStations) {
+        for (Firestation fireStation : fireStations) {
             if (fireStation.getAddress().equals(newFireStation.getAddress())) {
                 logger.warn("FireStation already exist : {} {}",
                         newFireStation.getAddress());
@@ -64,7 +64,7 @@ public class FirestationService implements GenericService<FireStation> {
 
         try {
             fireStations.add(newFireStation);
-            jsonWrapper.setList(FireStation.class, fireStations);
+            jsonWrapper.setList(Firestation.class, fireStations);
             logger.info("FireStation {} created successfully", newFireStation.getAddress());
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,7 +81,7 @@ public class FirestationService implements GenericService<FireStation> {
 
         fireStations.remove(readById(args));
         try {
-            jsonWrapper.setList(FireStation.class, fireStations);
+            jsonWrapper.setList(Firestation.class, fireStations);
             logger.info("FireStation {} deleted successfully", args[0]);
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,9 +89,9 @@ public class FirestationService implements GenericService<FireStation> {
     }
 
     @Override
-    public FireStation update(FireStation updatedFireStation, String... args) {
+    public Firestation update(Firestation updatedFireStation, String... args) {
         boolean found = false;
-        for (FireStation fireStation : fireStations) {
+        for (Firestation fireStation : fireStations) {
             if (fireStation.getAddress().equals(args[0])) {
                 int index = fireStations.indexOf(fireStation);
                 fireStations.set(index, updatedFireStation);
