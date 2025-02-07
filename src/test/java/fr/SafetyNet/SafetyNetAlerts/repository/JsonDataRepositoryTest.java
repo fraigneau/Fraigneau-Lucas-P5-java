@@ -20,7 +20,7 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 
 class JsonDataRepositoryTest {
 
-    private static final Path JSON = Paths.get("Doc/data.json");
+    private static final Path JSON = Paths.get("Data/data.json");
     private static final Path PROD_JSON = Paths.get("src/main/resources/data.json");
 
     private JsonDataRepository repository;
