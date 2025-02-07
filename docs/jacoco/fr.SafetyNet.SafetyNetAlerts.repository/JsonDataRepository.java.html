@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonDataRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.repository</a> &gt; <span class="el_source">JsonDataRepository.java</span></div><h1>JsonDataRepository.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.repository;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Person;
+import jakarta.annotation.PostConstruct;
+import lombok.Data;
+
+@Repository
+@Data
+public class JsonDataRepository {
+
+<span class="fc" id="L30">    private static final Logger logger = LoggerFactory.getLogger(JsonDataRepository.class);</span>
+    private static final String filePath = &quot;src/main/resources/data.json&quot;;
+<span class="fc" id="L32">    private static final Map&lt;Class&lt;?&gt;, String&gt; CLASS_TO_JSON_FIELD = new HashMap&lt;&gt;();</span>
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private JsonNode rootNode;
+
+    static {
+<span class="fc" id="L37">        CLASS_TO_JSON_FIELD.put(Person.class, &quot;persons&quot;);</span>
+<span class="fc" id="L38">        CLASS_TO_JSON_FIELD.put(Firestation.class, &quot;firestations&quot;);</span>
+<span class="fc" id="L39">        CLASS_TO_JSON_FIELD.put(Medicalrecord.class, &quot;medicalrecords&quot;);</span>
+<span class="fc" id="L40">    }</span>
+
+    @PostConstruct
+    public void loadJsonFile() throws IOException {
+<span class="fc" id="L44">        this.rootNode = objectMapper.readTree(new File(filePath));</span>
+<span class="fc" id="L45">        logger.info(&quot;JSON file loaded successfully from: {}&quot;, filePath);</span>
+<span class="fc" id="L46">    }</span>
+
+    public &lt;T&gt; List&lt;T&gt; getList(Class&lt;T&gt; klass) throws IOException {
+<span class="fc" id="L49">        JsonNode childNode = rootNode.path(JsonField(klass));</span>
+
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (!childNode.isArray()) {</span>
+<span class="nc" id="L52">            logger.error(&quot;Field '{}' is not an array.&quot;, JsonField(klass));</span>
+<span class="nc" id="L53">            throw new IllegalArgumentException(&quot;Field '&quot; + JsonField(klass) + &quot;' is not an array.&quot;);</span>
+        }
+
+<span class="fc" id="L56">        CollectionType listType = TypeFactory.defaultInstance().constructCollectionType(ArrayList.class, klass);</span>
+<span class="fc" id="L57">        logger.info(&quot;List of {} loaded successfully&quot;, JsonField(klass));</span>
+<span class="fc" id="L58">        return objectMapper.readValue(childNode.traverse(), listType);</span>
+    }
+
+    public static String JsonField(Class&lt;?&gt; klass) {
+<span class="fc" id="L62">        String jsonField = CLASS_TO_JSON_FIELD.get(klass);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (jsonField == null) {</span>
+<span class="fc" id="L64">            logger.error(&quot;No JSON field mapped for class: {}&quot;, klass.getSimpleName());</span>
+<span class="fc" id="L65">            throw new IllegalArgumentException(&quot;No JSON field mapped for class: &quot; + klass.getSimpleName());</span>
+        }
+<span class="fc" id="L67">        return jsonField;</span>
+    }
+
+    public &lt;T&gt; void setList(Class&lt;T&gt; klass, List&lt;T&gt; persons) throws IOException {
+        try {
+<span class="fc" id="L72">            JsonNode copyRootNode = rootNode.deepCopy();</span>
+<span class="fc" id="L73">            ObjectNode newRootNode = (ObjectNode) copyRootNode;</span>
+<span class="fc" id="L74">            newRootNode.set(JsonField(klass), objectMapper.valueToTree(persons));</span>
+<span class="fc" id="L75">            objectMapper.writeValue(new File(filePath), newRootNode);</span>
+<span class="fc" id="L76">            logger.info(&quot;JSON file updated successfully at: {}&quot;, filePath);</span>
+<span class="nc" id="L77">        } catch (IOException e) {</span>
+<span class="nc" id="L78">            logger.error(&quot;Failed to update JSON file at: {}&quot;, filePath);</span>
+<span class="nc" id="L79">            throw e;</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

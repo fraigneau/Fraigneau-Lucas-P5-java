@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.controller</a> &gt; <span class="el_source">SearchController.java</span></div><h1>SearchController.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RChildAlert;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RCommunityEmail;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFire;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFirestationCoverage;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFloodStations;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RPersonsInfoLastName;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RPhoneAlert;
+import fr.SafetyNet.SafetyNetAlerts.service.SearchService;
+
+@Controller
+@ResponseBody
+<span class="fc" id="L23">public class SearchController {</span>
+
+    @Autowired
+    private SearchService searchService;
+
+    @GetMapping(&quot;/firestationCoverage&quot;)
+    public RFirestationCoverage getCoveredPersonsByStation(@RequestParam int stationNumber) {
+<span class="fc" id="L30">        return searchService.getCoveredPersonsByStation(stationNumber);</span>
+    }
+
+    @GetMapping(&quot;/childAlert&quot;)
+    public RChildAlert getChildrenByAddress(@RequestParam String address) {
+<span class="fc" id="L35">        return searchService.getChildrenByAddress(address);</span>
+    }
+
+    @GetMapping(&quot;/phoneAlert&quot;)
+    public RPhoneAlert getPhonesByStation(@RequestParam int stationNumber) {
+<span class="fc" id="L40">        return searchService.getPhonesByStation(stationNumber);</span>
+    }
+
+    @GetMapping(&quot;/fire&quot;)
+    public RFire getPersonsByAddressStation(@RequestParam String address) {
+<span class="fc" id="L45">        return searchService.getPersonsByAddressStation(address);</span>
+    }
+
+    @GetMapping(&quot;/flood/stations&quot;)
+    public RFloodStations getPersonsByStationsWithMedicalRecord(@RequestParam List&lt;Integer&gt; stationNumbers) {
+<span class="fc" id="L50">        return searchService.getPersonsByStationsWithMedicalRecord(stationNumbers);</span>
+    }
+
+    @GetMapping(&quot;/personInfoLastName={lastName}&quot;)
+    public RPersonsInfoLastName getPersonByLastNameWithMedicalRecord(@PathVariable String lastName) {
+<span class="fc" id="L55">        return searchService.getPersonByLastNameWithMedicalRecord(lastName);</span>
+    }
+
+    @GetMapping(&quot;/communityEmail&quot;)
+    public RCommunityEmail getEmailsByCity(@RequestParam String city) {
+<span class="fc" id="L60">        return searchService.getEmailsByCity(city);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

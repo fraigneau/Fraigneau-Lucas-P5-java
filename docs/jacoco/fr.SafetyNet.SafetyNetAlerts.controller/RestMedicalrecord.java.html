@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestMedicalrecord.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.controller</a> &gt; <span class="el_source">RestMedicalrecord.java</span></div><h1>RestMedicalrecord.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.controller;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
+import fr.SafetyNet.SafetyNetAlerts.service.MedicalrecordService;
+
+@RestController
+public class RestMedicalrecord {
+
+    private final MedicalrecordService medicalrecordService;
+
+<span class="fc" id="L21">    public RestMedicalrecord(MedicalrecordService medicalrecordService) {</span>
+<span class="fc" id="L22">        this.medicalrecordService = medicalrecordService;</span>
+<span class="fc" id="L23">    }</span>
+
+    @GetMapping(&quot;/medicalrecord&quot;)
+    public List&lt;Medicalrecord&gt; readAll() {
+<span class="fc" id="L27">        return medicalrecordService.readAll();</span>
+    }
+
+    @GetMapping(&quot;medicalrecord/{firstName}.{lastName}&quot;)
+    public Medicalrecord readById(@PathVariable String firstName, @PathVariable String lastName) {
+<span class="fc" id="L32">        return medicalrecordService.readById(firstName, lastName);</span>
+    }
+
+    @PostMapping(&quot;/medicalrecord&quot;)
+    public String create(@RequestBody Medicalrecord medicalRecord) {
+<span class="fc" id="L37">        medicalrecordService.create(medicalRecord);</span>
+<span class="fc" id="L38">        return &quot;Medicalrecord created &quot; + medicalRecord.getFirstName() + &quot; &quot; + medicalRecord.getLastName();</span>
+    }
+
+    @DeleteMapping(&quot;/medicalrecord/{firstName}.{lastName}&quot;)
+    public String delete(@PathVariable String firstName, @PathVariable String lastName) {
+<span class="fc" id="L43">        medicalrecordService.deleteById(firstName, lastName);</span>
+<span class="fc" id="L44">        return &quot;Medicalrecord deleted &quot; + firstName + &quot; &quot; + lastName;</span>
+    }
+
+    @PutMapping(&quot;/medicalrecord/{firstName}.{lastName}&quot;)
+    public String update(@RequestBody Medicalrecord updatedRecord,
+            @PathVariable String firstName, @PathVariable String lastName) {
+<span class="fc" id="L50">        medicalrecordService.update(updatedRecord, firstName, lastName);</span>
+<span class="fc" id="L51">        return &quot;Medicalrecord updated &quot; + updatedRecord.getFirstName() + &quot; &quot; + updatedRecord.getLastName();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

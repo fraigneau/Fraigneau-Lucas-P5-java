@@ -119,14 +119,6 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.12</version>
-				<configuration>
-					<!-- Exclure les classes générées par MapStruct -->
-					<excludes>
-						<exclude>**/MapperStruct*.class</exclude>
-						<!-- Ou, si vos classes générées se trouvent dans un package dédié -->
-						<exclude>**/generated-sources/**</exclude>
-					</excludes>
-				</configuration>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>

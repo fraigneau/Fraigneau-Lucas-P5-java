@@ -15,8 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForChildAlert;
 import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFire;

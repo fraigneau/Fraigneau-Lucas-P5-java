@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestFirestation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.controller</a> &gt; <span class="el_source">RestFirestation.java</span></div><h1>RestFirestation.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.controller;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.service.FirestationService;
+
+@RestController
+public class RestFirestation {
+
+    private final FirestationService firestationService;
+
+<span class="fc" id="L21">    public RestFirestation(FirestationService firestationService) {</span>
+<span class="fc" id="L22">        this.firestationService = firestationService;</span>
+<span class="fc" id="L23">    }</span>
+
+    @GetMapping(&quot;/firestation&quot;)
+    public List&lt;Firestation&gt; readAll() {
+<span class="fc" id="L27">        return firestationService.readAll();</span>
+    }
+
+    @GetMapping(&quot;firestation/{adress}&quot;)
+    public Firestation readById(@PathVariable String adress) {
+<span class="fc" id="L32">        return firestationService.readById(adress);</span>
+    }
+
+    @PostMapping(&quot;/firestation&quot;)
+    public String create(@RequestBody Firestation fireStation) {
+<span class="fc" id="L37">        firestationService.create(fireStation);</span>
+<span class="fc" id="L38">        return &quot;Firestation created at address: &quot; + fireStation.getAddress();</span>
+    }
+
+    @DeleteMapping(&quot;/firestation/{adress}&quot;)
+    public String delete(@PathVariable String adress) {
+<span class="fc" id="L43">        firestationService.deleteById(adress);</span>
+<span class="fc" id="L44">        return &quot;Firestation deleted at address: &quot; + adress;</span>
+    }
+
+    @PutMapping(&quot;/firestation/{adress}&quot;)
+    public String update(@RequestBody Firestation updatedFireStation,
+            @PathVariable String adress) {
+<span class="fc" id="L50">        firestationService.update(updatedFireStation, adress);</span>
+<span class="fc" id="L51">        return &quot;Firestation updated at address: &quot; + updatedFireStation.getAddress();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

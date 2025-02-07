@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.controller,SearchController,0,38,0,0,0,8,0,8,0,8
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.controller,RestMedicalrecord,0,73,0,0,0,11,0,6,0,6
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.controller,RestFirestation,0,56,0,0,0,11,0,6,0,6
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.controller,RestPerson,0,65,0,0,0,11,0,6,0,6
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.service,SearchService,19,562,5,31,4,136,6,47,1,34
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.service,FirestationService,35,185,2,16,10,43,3,14,1,7
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.service,PersonService,35,226,5,19,10,47,6,14,1,7
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.service,MedicalrecordService,35,223,5,19,10,49,6,14,1,7
+SafetyNetAlerts,fr.SafetyNet.SafetyNetAlerts.repository,JsonDataRepository,19,115,1,3,5,26,1,6,0,5

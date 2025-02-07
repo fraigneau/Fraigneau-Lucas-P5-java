@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FirestationService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.service</a> &gt; <span class="el_source">FirestationService.java</span></div><h1>FirestationService.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.service;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import fr.SafetyNet.SafetyNetAlerts.exception.ConflictException;
+import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
+
+@Service
+public class FirestationService implements GenericService&lt;Firestation&gt; {
+
+    private List&lt;Firestation&gt; fireStations;
+    private JsonDataRepository jsonWrapper;
+<span class="fc" id="L21">    private static final Logger logger = LoggerFactory.getLogger(FirestationService.class);</span>
+
+<span class="nc" id="L23">    public FirestationService() {</span>
+<span class="nc" id="L24">    }</span>
+
+    @Autowired
+<span class="fc" id="L27">    public FirestationService(JsonDataRepository jsonWrapper) throws IOException {</span>
+<span class="fc" id="L28">        this.jsonWrapper = jsonWrapper;</span>
+<span class="fc" id="L29">        this.fireStations = jsonWrapper.getList(Firestation.class);</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    public List&lt;Firestation&gt; readAll() {
+<span class="fc" id="L34">        return fireStations;</span>
+    }
+
+    @Override
+    public Firestation readById(String... args) {
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (args.length != 1) {</span>
+<span class="nc" id="L40">            logger.error(&quot;Expected 1 arguments, got {}&quot;, args.length);</span>
+<span class="nc" id="L41">            throw new IllegalArgumentException(&quot;Expected 2 arguments, got &quot; + args.length);</span>
+        }
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        for (Firestation fireStation : fireStations) {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (fireStation.getAddress().equals(args[0])) {</span>
+<span class="fc" id="L46">                logger.info(&quot;FireStation found&quot;);</span>
+<span class="fc" id="L47">                return fireStation;</span>
+            }
+<span class="fc" id="L49">        }</span>
+<span class="fc" id="L50">        logger.error(&quot;FireStation not found&quot;);</span>
+<span class="fc" id="L51">        throw new ResourceNotFoundException(&quot;FireStation not found -&gt; &quot; + args[0]);</span>
+    }
+
+    @Override
+    public Firestation create(Firestation newFireStation) {
+
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (Firestation fireStation : fireStations) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (fireStation.getAddress().equals(newFireStation.getAddress())) {</span>
+<span class="fc" id="L59">                logger.warn(&quot;FireStation already exist : {} {}&quot;,</span>
+<span class="fc" id="L60">                        newFireStation.getAddress());</span>
+<span class="fc" id="L61">                throw new ConflictException(&quot;FireStation already exist&quot;);</span>
+            }
+<span class="fc" id="L63">        }</span>
+
+        try {
+<span class="fc" id="L66">            fireStations.add(newFireStation);</span>
+<span class="fc" id="L67">            jsonWrapper.setList(Firestation.class, fireStations);</span>
+<span class="fc" id="L68">            logger.info(&quot;FireStation {} created successfully&quot;, newFireStation.getAddress());</span>
+<span class="nc" id="L69">        } catch (IOException e) {</span>
+<span class="nc" id="L70">            e.printStackTrace();</span>
+<span class="fc" id="L71">        }</span>
+<span class="fc" id="L72">        return newFireStation;</span>
+    }
+
+    @Override
+    public void deleteById(String... args) {
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        if (args.length != 1) {</span>
+<span class="nc" id="L78">            logger.error(&quot;Expected 1 arguments, got {}&quot;, args.length);</span>
+<span class="nc" id="L79">            throw new IllegalArgumentException(&quot;Expected 1 arguments, got &quot; + args.length);</span>
+        }
+
+<span class="fc" id="L82">        fireStations.remove(readById(args));</span>
+        try {
+<span class="fc" id="L84">            jsonWrapper.setList(Firestation.class, fireStations);</span>
+<span class="fc" id="L85">            logger.info(&quot;FireStation {} deleted successfully&quot;, args[0]);</span>
+<span class="nc" id="L86">        } catch (IOException e) {</span>
+<span class="nc" id="L87">            e.printStackTrace();</span>
+<span class="fc" id="L88">        }</span>
+<span class="fc" id="L89">    }</span>
+
+    @Override
+    public Firestation update(Firestation updatedFireStation, String... args) {
+<span class="fc" id="L93">        boolean found = false;</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (Firestation fireStation : fireStations) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (fireStation.getAddress().equals(args[0])) {</span>
+<span class="fc" id="L96">                int index = fireStations.indexOf(fireStation);</span>
+<span class="fc" id="L97">                fireStations.set(index, updatedFireStation);</span>
+<span class="fc" id="L98">                found = true;</span>
+            }
+<span class="fc" id="L100">        }</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (!found) {</span>
+<span class="fc" id="L102">            logger.error(&quot;{} not found&quot;, updatedFireStation.getAddress());</span>
+<span class="fc" id="L103">            throw new ResourceNotFoundException(&quot;FireStation not found -&gt; &quot; + args[0]);</span>
+        }
+<span class="fc" id="L105">        logger.info(&quot;FireStation {} updated successfully&quot;, updatedFireStation.getAddress());</span>
+<span class="fc" id="L106">        return updatedFireStation;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

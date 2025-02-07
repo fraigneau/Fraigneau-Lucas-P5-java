@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SafetyNetAlerts</a> &gt; <a href="index.source.html" class="el_package">fr.SafetyNet.SafetyNetAlerts.service</a> &gt; <span class="el_source">SearchService.java</span></div><h1>SearchService.java</h1><pre class="source lang-java linenums">package fr.SafetyNet.SafetyNetAlerts.service;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForChildAlert;
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFire;
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFirestationCoverage;
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForFloodStations;
+import fr.SafetyNet.SafetyNetAlerts.dto.person.RPersonForPersonsInfoLastName;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RChildAlert;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RCommunityEmail;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFire;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFirestationCoverage;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RFloodStations;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RPersonsInfoLastName;
+import fr.SafetyNet.SafetyNetAlerts.dto.search.RPhoneAlert;
+import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
+import fr.SafetyNet.SafetyNetAlerts.mapper.PersonMapper;
+import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
+import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
+import fr.SafetyNet.SafetyNetAlerts.model.Person;
+
+@Service
+public class SearchService {
+
+<span class="fc" id="L35">    private static final Logger logger = LoggerFactory.getLogger(SearchService.class);</span>
+    private final PersonMapper personMapper;
+
+    List&lt;Person&gt; persons;
+    List&lt;Firestation&gt; firestations;
+    List&lt;Medicalrecord&gt; medicalrecords;
+
+    public SearchService(PersonMapper personMapper, FirestationService firestationService,
+<span class="fc" id="L43">            MedicalrecordService medicalrecordService, PersonService personService) {</span>
+<span class="fc" id="L44">        this.firestations = firestationService.readAll();</span>
+<span class="fc" id="L45">        this.medicalrecords = medicalrecordService.readAll();</span>
+<span class="fc" id="L46">        this.persons = personService.readAll();</span>
+
+<span class="fc" id="L48">        this.personMapper = personMapper;</span>
+<span class="fc" id="L49">    }</span>
+
+    public RFirestationCoverage getCoveredPersonsByStation(int stationNumber) {
+
+<span class="fc" id="L53">        AtomicInteger adultCount = new AtomicInteger();</span>
+<span class="fc" id="L54">        AtomicInteger childCount = new AtomicInteger();</span>
+
+<span class="fc" id="L56">        List&lt;Firestation&gt; firestationsWithSameNumberStation = firestations.stream()</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">                .filter(firestation -&gt; firestation.getStation() == stationNumber)</span>
+<span class="fc" id="L58">                .toList();</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (firestationsWithSameNumberStation.isEmpty()) {</span>
+<span class="fc" id="L61">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L62">            throw new ResourceNotFoundException(&quot;No firestations found for station number: &quot; + stationNumber);</span>
+        }
+
+<span class="fc" id="L65">        List&lt;RPersonForFirestationCoverage&gt; coveredPersons = persons.stream()</span>
+<span class="fc" id="L66">                .filter(person -&gt; firestationsWithSameNumberStation.stream()</span>
+<span class="fc" id="L67">                        .anyMatch(firestation -&gt; firestation.getAddress().equals(person.getAddress())))</span>
+<span class="fc" id="L68">                .map((Person person) -&gt; {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                    if (getAge(person) &gt;= 18) {</span>
+<span class="fc" id="L70">                        adultCount.incrementAndGet();</span>
+                    } else {
+<span class="fc" id="L72">                        childCount.incrementAndGet();</span>
+                    }
+
+<span class="fc" id="L75">                    return personMapper.toPersonForFirestationCoverageResponseDTO(person);</span>
+                })
+<span class="fc" id="L77">                .toList();</span>
+
+<span class="fc" id="L79">        return new RFirestationCoverage(</span>
+                adultCount,
+                childCount,
+                coveredPersons);
+    }
+
+    public RChildAlert getChildrenByAddress(String address) {
+
+<span class="fc" id="L87">        List&lt;Person&gt; residents = persons.stream()</span>
+<span class="fc" id="L88">                .filter(person -&gt; person.getAddress().equals(address))</span>
+<span class="fc" id="L89">                .toList();</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (residents.isEmpty()) {</span>
+<span class="fc" id="L92">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L93">            return new RChildAlert(List.of());</span>
+        }
+
+<span class="fc" id="L96">        List&lt;RPersonForChildAlert&gt; children = residents.stream()</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                .filter(resident -&gt; getAge(resident) &lt;= 18)</span>
+<span class="fc" id="L98">                .map(child -&gt; {</span>
+
+<span class="fc" id="L100">                    List&lt;Person&gt; relatives = residents.stream()</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                            .filter(resident -&gt; !resident.equals(child))</span>
+<span class="fc" id="L102">                            .map(personMapper::toResponseDTO)</span>
+<span class="fc" id="L103">                            .toList();</span>
+
+<span class="fc" id="L105">                    return new RPersonForChildAlert(</span>
+<span class="fc" id="L106">                            child.getFirstName(),</span>
+<span class="fc" id="L107">                            child.getLastName(),</span>
+<span class="fc" id="L108">                            getAge(child),</span>
+                            relatives);
+                })
+<span class="fc" id="L111">                .toList();</span>
+
+<span class="fc" id="L113">        return new RChildAlert(children);</span>
+    }
+
+    public RPhoneAlert getPhonesByStation(int stationNumber) {
+
+<span class="fc" id="L118">        List&lt;Firestation&gt; firestationsWithSameNumberStation = firestations.stream()</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">                .filter(firestation -&gt; firestation.getStation() == stationNumber)</span>
+<span class="fc" id="L120">                .toList();</span>
+
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (firestationsWithSameNumberStation.isEmpty()) {</span>
+<span class="fc" id="L123">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L124">            throw new ResourceNotFoundException(&quot;No firestations found for station number: &quot; + stationNumber);</span>
+        }
+
+<span class="fc" id="L127">        List&lt;String&gt; phones = persons.stream()</span>
+<span class="fc" id="L128">                .filter(person -&gt; firestationsWithSameNumberStation.stream()</span>
+<span class="fc" id="L129">                        .anyMatch(firestation -&gt; firestation.getAddress().equals(person.getAddress())))</span>
+<span class="fc" id="L130">                .map(Person::getPhone)</span>
+<span class="fc" id="L131">                .toList();</span>
+
+<span class="fc" id="L133">        return new RPhoneAlert(phones);</span>
+    }
+
+    public RFire getPersonsByAddressStation(String address) {
+
+<span class="fc" id="L138">        List&lt;Integer&gt; stations = firestations.stream()</span>
+<span class="fc" id="L139">                .filter(firestation -&gt; firestation.getAddress().equals(address))</span>
+<span class="fc" id="L140">                .map(Firestation::getStation)</span>
+<span class="fc" id="L141">                .toList();</span>
+
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (stations.isEmpty()) {</span>
+<span class="fc" id="L144">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L145">            throw new ResourceNotFoundException(&quot;No firestation found for address: &quot; + address);</span>
+        }
+
+<span class="fc" id="L148">        List&lt;Person&gt; residents = persons.stream()</span>
+<span class="fc" id="L149">                .filter(person -&gt; person.getAddress().equals(address))</span>
+<span class="fc" id="L150">                .toList();</span>
+
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (residents.isEmpty()) {</span>
+<span class="fc" id="L153">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L154">            throw new ResourceNotFoundException(&quot;No residents found for the address: &quot; + address);</span>
+        }
+
+<span class="fc" id="L157">        List&lt;RPersonForFire&gt; persons = residents.stream()</span>
+<span class="fc" id="L158">                .map(person -&gt; new RPersonForFire(</span>
+<span class="fc" id="L159">                        person.getLastName(),</span>
+<span class="fc" id="L160">                        person.getPhone(),</span>
+<span class="fc" id="L161">                        getAge(person),</span>
+<span class="fc" id="L162">                        getMedications(person),</span>
+<span class="fc" id="L163">                        getAllergies(person)))</span>
+<span class="fc" id="L164">                .toList();</span>
+
+<span class="fc" id="L166">        return new RFire(</span>
+                stations,
+                persons);
+    }
+
+    public RFloodStations getPersonsByStationsWithMedicalRecord(List&lt;Integer&gt; stationNumbers) {
+
+<span class="fc" id="L173">        List&lt;String&gt; firestationsByAddress = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        for (Integer stationNumber : stationNumbers) {</span>
+<span class="fc" id="L176">            firestations.stream()</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">                    .filter(firestation -&gt; firestation.getStation() == stationNumber)</span>
+<span class="fc" id="L178">                    .map(Firestation::getAddress)</span>
+<span class="fc" id="L179">                    .forEach(firestationsByAddress::add);</span>
+<span class="fc" id="L180">        }</span>
+
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (firestationsByAddress.isEmpty()) {</span>
+<span class="fc" id="L183">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L184">            throw new ResourceNotFoundException(&quot;Resource not found for station numbers: &quot; + stationNumbers);</span>
+        }
+
+<span class="fc" id="L187">        List&lt;Person&gt; residents = persons.stream()</span>
+<span class="fc" id="L188">                .filter(person -&gt; firestationsByAddress.contains(person.getAddress()))</span>
+<span class="fc" id="L189">                .toList();</span>
+
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (residents.isEmpty()) {</span>
+<span class="nc" id="L192">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="nc" id="L193">            throw new ResourceNotFoundException(&quot;No residents found for the given stations.&quot;);</span>
+        }
+
+<span class="fc" id="L196">        List&lt;RPersonForFloodStations&gt; persons = residents.stream()</span>
+<span class="fc" id="L197">                .map(person -&gt; new RPersonForFloodStations(</span>
+<span class="fc" id="L198">                        person.getAddress(),</span>
+<span class="fc" id="L199">                        person.getLastName(),</span>
+<span class="fc" id="L200">                        person.getPhone(),</span>
+<span class="fc" id="L201">                        getAge(person),</span>
+<span class="fc" id="L202">                        getMedications(person),</span>
+<span class="fc" id="L203">                        getAllergies(person)))</span>
+<span class="fc" id="L204">                .toList();</span>
+
+<span class="fc" id="L206">        return new RFloodStations(persons);</span>
+    }
+
+    public RPersonsInfoLastName getPersonByLastNameWithMedicalRecord(String lastName) {
+
+<span class="fc" id="L211">        List&lt;RPersonForPersonsInfoLastName&gt; personsTargeted = persons.stream()</span>
+<span class="fc" id="L212">                .filter(person -&gt; person.getLastName().equals(lastName))</span>
+<span class="fc" id="L213">                .map(person -&gt; new RPersonForPersonsInfoLastName(</span>
+<span class="fc" id="L214">                        person.getLastName(),</span>
+<span class="fc" id="L215">                        person.getAddress(),</span>
+<span class="fc" id="L216">                        getAge(person),</span>
+<span class="fc" id="L217">                        person.getEmail(),</span>
+<span class="fc" id="L218">                        getMedications(person),</span>
+<span class="fc" id="L219">                        getAllergies(person)))</span>
+<span class="fc" id="L220">                .toList();</span>
+
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (personsTargeted.isEmpty()) {</span>
+<span class="fc" id="L223">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L224">            throw new ResourceNotFoundException(&quot;Resource not found for the lastName: &quot; + lastName);</span>
+        }
+
+<span class="fc" id="L227">        return new RPersonsInfoLastName(personsTargeted);</span>
+    }
+
+    public RCommunityEmail getEmailsByCity(String city) {
+
+<span class="fc" id="L232">        List&lt;String&gt; emails = persons.stream()</span>
+<span class="fc" id="L233">                .filter(person -&gt; person.getCity().equals(city))</span>
+<span class="fc" id="L234">                .map(Person::getEmail)</span>
+<span class="fc" id="L235">                .toList();</span>
+
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (emails.isEmpty()) {</span>
+<span class="fc" id="L238">            logger.warn(&quot;Resource not found&quot;);</span>
+<span class="fc" id="L239">            throw new ResourceNotFoundException(&quot;Resource not found for the city: &quot; + city);</span>
+        }
+
+<span class="fc" id="L242">        return new RCommunityEmail(emails);</span>
+    }
+
+    private Medicalrecord getMedicalRecord(Person person) {
+<span class="fc" id="L246">        return medicalrecords.stream()</span>
+<span class="fc bfc" id="L247" title="All 2 branches covered.">                .filter(record -&gt; record.getFirstName().equals(person.getFirstName()) &amp;&amp;</span>
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">                        record.getLastName().equals(person.getLastName()))</span>
+<span class="fc" id="L249">                .findFirst()</span>
+<span class="fc" id="L250">                .orElseThrow(() -&gt; {</span>
+<span class="nc" id="L251">                    logger.warn(&quot;Resource not found&quot;);</span>
+<span class="nc" id="L252">                    return new ResourceNotFoundException(&quot;Medical record not found&quot;);</span>
+                });
+    }
+
+    public List&lt;String&gt; getMedications(Person person) {
+<span class="fc" id="L257">        Medicalrecord record = getMedicalRecord(person);</span>
+<span class="fc" id="L258">        return record.getMedications();</span>
+    }
+
+    public List&lt;String&gt; getAllergies(Person person) {
+<span class="fc" id="L262">        Medicalrecord record = getMedicalRecord(person);</span>
+<span class="fc" id="L263">        return record.getAllergies();</span>
+    }
+
+    public int getAge(Person person) {
+<span class="fc" id="L267">        Medicalrecord record = getMedicalRecord(person);</span>
+<span class="fc" id="L268">        LocalDate dateOfBirth = LocalDate.parse(record.getBirthdate(), DateTimeFormatter.ofPattern(&quot;MM/dd/yyyy&quot;));</span>
+<span class="fc" id="L269">        return Period.between(dateOfBirth, LocalDate.now()).getYears();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
