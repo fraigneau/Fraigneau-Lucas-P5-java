@@ -23,6 +23,9 @@ import fr.SafetyNet.SafetyNetAlerts.model.Person;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 
+/**
+ * Repository for managing data stored in a JSON file.
+ */
 @Repository
 @Data
 public class JsonDataRepository {
@@ -39,12 +42,25 @@ public class JsonDataRepository {
         CLASS_TO_JSON_FIELD.put(Medicalrecord.class, "medicalrecords");
     }
 
+    /**
+     * Loads the JSON file into memory after the bean is constructed.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @PostConstruct
     public void loadJsonFile() throws IOException {
         this.rootNode = objectMapper.readTree(new File(filePath));
         logger.info("JSON file loaded successfully from: {}", filePath);
     }
 
+    /**
+     * Retrieves a list of objects of the specified class from the JSON file.
+     *
+     * @param <T>   the type of objects to retrieve
+     * @param klass the class of objects to retrieve
+     * @return a list of objects of the specified class
+     * @throws IOException if an I/O error occurs
+     */
     public <T> List<T> getList(Class<T> klass) throws IOException {
         JsonNode childNode = rootNode.path(JsonField(klass));
 
@@ -58,6 +74,12 @@ public class JsonDataRepository {
         return objectMapper.readValue(childNode.traverse(), listType);
     }
 
+    /**
+     * Retrieves the JSON field name for the specified class.
+     *
+     * @param klass the class to retrieve the JSON field name for
+     * @return the JSON field name for the specified class
+     */
     public static String JsonField(Class<?> klass) {
         String jsonField = CLASS_TO_JSON_FIELD.get(klass);
         if (jsonField == null) {
@@ -67,6 +89,14 @@ public class JsonDataRepository {
         return jsonField;
     }
 
+    /**
+     * Updates the list of objects of the specified class in the JSON file.
+     *
+     * @param <T>     the type of objects to update
+     * @param klass   the class of objects to update
+     * @param persons the list of objects to update
+     * @throws IOException if an I/O error occurs
+     */
     public <T> void setList(Class<T> klass, List<T> persons) throws IOException {
         try {
             JsonNode copyRootNode = rootNode.deepCopy();

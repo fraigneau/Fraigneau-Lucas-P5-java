@@ -13,6 +13,9 @@ import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
 import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
+/**
+ * Service for managing Medicalrecord entities.
+ */
 @Service
 public class MedicalrecordService implements GenericService<Medicalrecord> {
 
@@ -20,20 +23,43 @@ public class MedicalrecordService implements GenericService<Medicalrecord> {
     private JsonDataRepository jsonWrapper;
     private static final Logger logger = LoggerFactory.getLogger(MedicalrecordService.class);
 
+    /**
+     * Default constructor.
+     */
     public MedicalrecordService() {
     }
 
+    /**
+     * Constructs a new MedicalrecordService with the specified JsonDataRepository.
+     *
+     * @param jsonWrapper the repository to manage JSON data
+     * @throws IOException if an I/O error occurs
+     */
     @Autowired
     public MedicalrecordService(JsonDataRepository jsonWrapper) throws IOException {
         this.jsonWrapper = jsonWrapper;
         this.medicalRecords = jsonWrapper.getList(Medicalrecord.class);
     }
 
+    /**
+     * Retrieves all medical records.
+     *
+     * @return a list of all medical records
+     */
     @Override
     public List<Medicalrecord> readAll() {
         return medicalRecords;
     }
 
+    /**
+     * Retrieves a medical record by first and last name.
+     *
+     * @param args the first and last name of the person
+     * @return the medical record of the person with the specified first and last
+     *         name
+     * @throws IllegalArgumentException  if the number of arguments is not 2
+     * @throws ResourceNotFoundException if the medical record is not found
+     */
     @Override
     public Medicalrecord readById(String... args) {
         if (args.length != 2) {
@@ -51,16 +77,22 @@ public class MedicalrecordService implements GenericService<Medicalrecord> {
         throw new ResourceNotFoundException("MedicalRecord not found -> " + args[0] + ", " + args[1]);
     }
 
+    /**
+     * Creates a new medical record.
+     *
+     * @param newMedicalRecord the medical record to create
+     * @return the created medical record
+     * @throws ConflictException if the medical record already exists
+     */
     @Override
     public Medicalrecord create(Medicalrecord newMedicalRecord) {
 
         for (Medicalrecord medicalRecord : medicalRecords) {
             if (medicalRecord.getFirstName().equals(newMedicalRecord.getFirstName())
-                    && medicalRecord.getLastName().equals(
-                            newMedicalRecord.getLastName())) {
-                logger.warn("medicalRecord already exist : {} {}",
+                    && medicalRecord.getLastName().equals(newMedicalRecord.getLastName())) {
+                logger.warn("MedicalRecord already exists: {} {}",
                         newMedicalRecord.getFirstName(), newMedicalRecord.getLastName());
-                throw new ConflictException("MedicalRecord already exist");
+                throw new ConflictException("MedicalRecord already exists");
             }
         }
 
@@ -75,6 +107,12 @@ public class MedicalrecordService implements GenericService<Medicalrecord> {
         return newMedicalRecord;
     }
 
+    /**
+     * Deletes a medical record by first and last name.
+     *
+     * @param args the first and last name of the person
+     * @throws IllegalArgumentException if the number of arguments is not 2
+     */
     @Override
     public void deleteById(String... args) {
         if (args.length != 2) {
@@ -91,6 +129,14 @@ public class MedicalrecordService implements GenericService<Medicalrecord> {
         }
     }
 
+    /**
+     * Updates an existing medical record.
+     *
+     * @param updatedMedicalRecord the updated medical record data
+     * @param args                 the first and last name of the person
+     * @return the updated medical record
+     * @throws ResourceNotFoundException if the medical record is not found
+     */
     @Override
     public Medicalrecord update(Medicalrecord updatedMedicalRecord, String... args) {
         boolean found = false;

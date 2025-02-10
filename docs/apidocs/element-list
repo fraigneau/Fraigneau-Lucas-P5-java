@@ -1,0 +1,11 @@
+fr.SafetyNet.SafetyNetAlerts
+fr.SafetyNet.SafetyNetAlerts.controller
+fr.SafetyNet.SafetyNetAlerts.dto
+fr.SafetyNet.SafetyNetAlerts.dto.person
+fr.SafetyNet.SafetyNetAlerts.dto.search
+fr.SafetyNet.SafetyNetAlerts.exception
+fr.SafetyNet.SafetyNetAlerts.mapper
+fr.SafetyNet.SafetyNetAlerts.model
+fr.SafetyNet.SafetyNetAlerts.repository
+fr.SafetyNet.SafetyNetAlerts.service
+fr.SafetyNet.SafetyNetAlerts.util

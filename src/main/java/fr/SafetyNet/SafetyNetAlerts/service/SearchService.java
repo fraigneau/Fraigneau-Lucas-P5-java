@@ -29,6 +29,9 @@ import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
 import fr.SafetyNet.SafetyNetAlerts.model.Medicalrecord;
 import fr.SafetyNet.SafetyNetAlerts.model.Person;
 
+/**
+ * Service for handling search-related operations.
+ */
 @Service
 public class SearchService {
 
@@ -39,17 +42,29 @@ public class SearchService {
     List<Firestation> firestations;
     List<Medicalrecord> medicalrecords;
 
+    /**
+     * Constructs a new SearchService with the specified dependencies.
+     *
+     * @param personMapper         the mapper to convert Person entities to DTOs
+     * @param firestationService   the service to manage firestations
+     * @param medicalrecordService the service to manage medical records
+     * @param personService        the service to manage persons
+     */
     public SearchService(PersonMapper personMapper, FirestationService firestationService,
             MedicalrecordService medicalrecordService, PersonService personService) {
         this.firestations = firestationService.readAll();
         this.medicalrecords = medicalrecordService.readAll();
         this.persons = personService.readAll();
-
         this.personMapper = personMapper;
     }
 
+    /**
+     * Retrieves the coverage of persons by a fire station.
+     *
+     * @param stationNumber the number of the fire station
+     * @return the coverage details of the fire station
+     */
     public RFirestationCoverage getCoveredPersonsByStation(int stationNumber) {
-
         AtomicInteger adultCount = new AtomicInteger();
         AtomicInteger childCount = new AtomicInteger();
 
@@ -71,19 +86,20 @@ public class SearchService {
                     } else {
                         childCount.incrementAndGet();
                     }
-
                     return personMapper.toPersonForFirestationCoverageResponseDTO(person);
                 })
                 .toList();
 
-        return new RFirestationCoverage(
-                adultCount,
-                childCount,
-                coveredPersons);
+        return new RFirestationCoverage(adultCount, childCount, coveredPersons);
     }
 
+    /**
+     * Retrieves children by address.
+     *
+     * @param address the address to search for children
+     * @return the details of children at the specified address
+     */
     public RChildAlert getChildrenByAddress(String address) {
-
         List<Person> residents = persons.stream()
                 .filter(person -> person.getAddress().equals(address))
                 .toList();
@@ -96,7 +112,6 @@ public class SearchService {
         List<RPersonForChildAlert> children = residents.stream()
                 .filter(resident -> getAge(resident) <= 18)
                 .map(child -> {
-
                     List<Person> relatives = residents.stream()
                             .filter(resident -> !resident.equals(child))
                             .map(personMapper::toResponseDTO)
@@ -113,8 +128,13 @@ public class SearchService {
         return new RChildAlert(children);
     }
 
+    /**
+     * Retrieves phone numbers by fire station number.
+     *
+     * @param stationNumber the number of the fire station
+     * @return the phone numbers associated with the fire station
+     */
     public RPhoneAlert getPhonesByStation(int stationNumber) {
-
         List<Firestation> firestationsWithSameNumberStation = firestations.stream()
                 .filter(firestation -> firestation.getStation() == stationNumber)
                 .toList();

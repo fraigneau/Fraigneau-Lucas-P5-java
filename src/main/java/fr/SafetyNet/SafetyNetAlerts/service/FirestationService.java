@@ -13,6 +13,9 @@ import fr.SafetyNet.SafetyNetAlerts.exception.ResourceNotFoundException;
 import fr.SafetyNet.SafetyNetAlerts.model.Firestation;
 import fr.SafetyNet.SafetyNetAlerts.repository.JsonDataRepository;
 
+/**
+ * Service for managing Firestation entities.
+ */
 @Service
 public class FirestationService implements GenericService<Firestation> {
 
@@ -20,25 +23,47 @@ public class FirestationService implements GenericService<Firestation> {
     private JsonDataRepository jsonWrapper;
     private static final Logger logger = LoggerFactory.getLogger(FirestationService.class);
 
+    /**
+     * Default constructor.
+     */
     public FirestationService() {
     }
 
+    /**
+     * Constructs a new FirestationService with the specified JsonDataRepository.
+     *
+     * @param jsonWrapper the repository to manage JSON data
+     * @throws IOException if an I/O error occurs
+     */
     @Autowired
     public FirestationService(JsonDataRepository jsonWrapper) throws IOException {
         this.jsonWrapper = jsonWrapper;
         this.fireStations = jsonWrapper.getList(Firestation.class);
     }
 
+    /**
+     * Retrieves all firestations.
+     *
+     * @return a list of all firestations
+     */
     @Override
     public List<Firestation> readAll() {
         return fireStations;
     }
 
+    /**
+     * Retrieves a firestation by its address.
+     *
+     * @param args the address of the firestation to retrieve
+     * @return the firestation with the specified address
+     * @throws IllegalArgumentException  if the number of arguments is not 1
+     * @throws ResourceNotFoundException if the firestation is not found
+     */
     @Override
     public Firestation readById(String... args) {
         if (args.length != 1) {
             logger.error("Expected 1 arguments, got {}", args.length);
-            throw new IllegalArgumentException("Expected 2 arguments, got " + args.length);
+            throw new IllegalArgumentException("Expected 1 arguments, got " + args.length);
         }
 
         for (Firestation fireStation : fireStations) {
@@ -51,6 +76,13 @@ public class FirestationService implements GenericService<Firestation> {
         throw new ResourceNotFoundException("FireStation not found -> " + args[0]);
     }
 
+    /**
+     * Creates a new firestation.
+     *
+     * @param newFireStation the firestation to create
+     * @return the created firestation
+     * @throws ConflictException if the firestation already exists
+     */
     @Override
     public Firestation create(Firestation newFireStation) {
 
@@ -72,6 +104,12 @@ public class FirestationService implements GenericService<Firestation> {
         return newFireStation;
     }
 
+    /**
+     * Deletes a firestation by its address.
+     *
+     * @param args the address of the firestation to delete
+     * @throws IllegalArgumentException if the number of arguments is not 1
+     */
     @Override
     public void deleteById(String... args) {
         if (args.length != 1) {
@@ -88,6 +126,14 @@ public class FirestationService implements GenericService<Firestation> {
         }
     }
 
+    /**
+     * Updates an existing firestation.
+     *
+     * @param updatedFireStation the updated firestation data
+     * @param args               the address of the firestation to update
+     * @return the updated firestation
+     * @throws ResourceNotFoundException if the firestation is not found
+     */
     @Override
     public Firestation update(Firestation updatedFireStation, String... args) {
         boolean found = false;

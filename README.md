@@ -8,7 +8,7 @@ SafetyNet Alerts is a Spring Boot-based application designed for emergency manag
 
 - [Jacoco Documentation](https://fraigneau.github.io/Fraigneau-Lucas-P5-java/jacoco/)
 - [Surefire Documentation](https://fraigneau.github.io/Fraigneau-Lucas-P5-java/surefire/)
-- [Spring Boot Documentation](https://fraigneau.github.io/Fraigneau-Lucas-P5-java/javadoc/)
+- [Spring Boot Documentation](https://fraigneau.github.io/Fraigneau-Lucas-P5-java/apidocs/)
 
 
 ## Technology Stack
